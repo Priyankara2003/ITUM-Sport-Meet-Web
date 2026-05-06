@@ -3,12 +3,37 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
 
 export function HeroSection() {
   const [days, setDays] = useState(0)
   const [hours, setHours] = useState(0)
   const [minutes, setMinutes] = useState(0)
   const [seconds, setSeconds] = useState(0)
+
+  const [nextEvent, setNextEvent] = useState<{
+    title: string;
+    event_date: string;
+    location: string;
+  } | null>(null);
+
+  useEffect(() => {
+    const fetchCountdownEvent = async () => {
+      const supabase = createClient()
+      const { data, error } = await supabase
+        .from('hero_countdown')
+        .select('*')
+        .eq('is_active', true)
+        .order('event_date', { ascending: true })
+        .limit(1)
+        .single()
+
+      if (!error && data) {
+        setNextEvent(data)
+      }
+    }
+    fetchCountdownEvent()
+  }, [])
 
   const heroImageUrl =
     'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/hero-f1.png'
@@ -21,8 +46,10 @@ export function HeroSection() {
   ]
 
   useEffect(() => {
+    if (!nextEvent) return
+
     const timer = setInterval(() => {
-      const countdownDate = new Date('2026-05-25').getTime()
+      const countdownDate = new Date(nextEvent.event_date).getTime()
       const now = new Date().getTime()
       const distance = countdownDate - now
 
@@ -33,11 +60,16 @@ export function HeroSection() {
         )
         setMinutes(Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)))
         setSeconds(Math.floor((distance % (1000 * 60)) / 1000))
+      } else {
+        setDays(0)
+        setHours(0)
+        setMinutes(0)
+        setSeconds(0)
       }
     }, 1000)
 
     return () => clearInterval(timer)
-  }, [])
+  }, [nextEvent])
 
   return (
     <div className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background pt-10 pb-18">
@@ -102,15 +134,15 @@ export function HeroSection() {
         </div>
 
         {/* Countdown Timer */}
-        <div className="relative rounded-xl overflow-hidden mb-12 backdrop-blur-sm bg-card/40 border border-primary/30 p-8">
+        <div className="relative rounded-xl overflow-hidden mb-12 backdrop-blur-sm bg-card/40 border border-primary/30 p-4 sm:p-8">
           <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5"></div>
-          
+
           <div className="relative">
-            <h3 className="text-center text-sm font-mono tracking-widest text-primary/80 mb-8 uppercase">
+            <h3 className="text-center text-xs sm:text-sm font-mono tracking-widest text-primary/80 mb-6 sm:mb-8 uppercase">
               Next Championship Battle
             </h3>
-            
-            <div className="grid grid-cols-4 gap-4 mb-8">
+
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
               {[
                 { value: days, label: 'Days' },
                 { value: hours, label: 'Hours' },
@@ -133,10 +165,16 @@ export function HeroSection() {
                 </div>
               ))}
             </div>
-            
+
             <div className="text-center">
-              <p className="text-sm font-semibold text-primary mb-2">Cricket Match Championship</p>
-              <p className="text-xs text-muted-foreground">May 25, 2026 • Central Ground</p>
+              <p className="text-sm font-semibold text-primary mb-2">
+                {nextEvent ? `${nextEvent.title}` : 'Upcoming Event'}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {nextEvent
+                  ? `${new Date(nextEvent.event_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} • ${nextEvent.location}`
+                  : 'Fetching details...'}
+              </p>
             </div>
           </div>
         </div>

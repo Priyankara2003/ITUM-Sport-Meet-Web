@@ -3,6 +3,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useState } from 'react'
+import { Menu, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
 type WeatherState = {
@@ -14,6 +16,7 @@ type WeatherState = {
 
 export function Navbar() {
   const pathname = usePathname()
+  const [isOpen, setIsOpen] = useState(false)
   const [weather, setWeather] = useState<WeatherState | null>(null)
   const [weatherError, setWeatherError] = useState(false)
 
@@ -80,6 +83,7 @@ export function Navbar() {
         {/* Logo/Branding */}
         <Link
           href="/"
+          onClick={() => setIsOpen(false)}
           className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-300"
         >
           <Image
@@ -118,19 +122,59 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Mobile menu indicator */}
-        <div className="md:hidden flex items-center gap-2">
+        {/* Right Side */}
+        <div className="flex items-center gap-4">
+          {/* Right side decoration */}
+          <div className="flex items-center gap-3">
+            <div className="hidden sm:block w-px h-6 bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
+            <div className="text-xs text-primary/60 font-mono tracking-widest">EST 2026</div>
+          </div>
+
+          {/* Mobile menu button */}
+          <div className="md:hidden flex items-center">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              className="relative text-primary hover:text-primary/80 transition-colors p-1 w-8 h-8 flex items-center justify-center overflow-hidden"
+              aria-label="Toggle menu"
+            >
+              <div
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                  isOpen ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'
+                }`}
+              >
+                <Menu size={24} />
+              </div>
+              <div
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                  isOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'
+                }`}
+              >
+                <X size={24} />
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Mobile Menu Dropdown */}
+      <div 
+        className={`md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(212,175,55,0.1)] transition-all duration-300 ease-in-out overflow-hidden ${
+          isOpen ? 'max-h-[400px] opacity-100 border-b border-primary/20' : 'max-h-0 opacity-0'
+        }`}
+      >
+        <div className="flex flex-col gap-2 p-4">
           {navItems.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className={`text-xs font-bold tracking-wider transition-colors ${
+              onClick={() => setIsOpen(false)}
+              className={`relative px-4 py-3 text-sm font-bold tracking-widest transition-all duration-300 rounded-lg ${
                 isActive(item.href)
-                  ? 'text-primary'
-                  : 'text-muted-foreground'
+                  ? 'text-primary bg-primary/10'
+                  : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
               }`}
             >
-              {item.label.charAt(0)}
+              {item.label}
             </Link>
           ))}
         </div>
