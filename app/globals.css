@@ -159,3 +159,24 @@
     opacity: 1;
   }
 }
+
+.blink-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0.45rem;
+  color: var(--primary);
+  animation: blink-scale 1.4s ease-in-out infinite;
+}
+
+@keyframes blink-scale {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}

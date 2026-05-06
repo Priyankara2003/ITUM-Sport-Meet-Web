@@ -147,6 +147,32 @@ export default function Home() {
           <p className="text-xs text-muted-foreground">
             Celebrating athletic excellence, house pride, and the pursuit of glory
           </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Developed by</span>
+              <span className="blink-dot">•</span>
+              <span>Srinath</span>
+            </Link>
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Developed by</span>
+              <span className="blink-dot">•</span>
+              <span>Dhanushka</span>
+            </Link>
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Designed by</span>
+              <span className="blink-dot">•</span>
+              <span>Thisara</span>
+            </Link>
+          </div>
         </div>
       </footer>
     </main>
