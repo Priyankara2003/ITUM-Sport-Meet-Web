@@ -131,50 +131,6 @@ export default function Home() {
         </MotionSection>
       </div>
 
-      {/* Footer */}
-      <footer className="mt-32 border-t border-primary/20 backdrop-blur-sm bg-card/30 py-12">
-        <div className="mx-auto max-w-7xl px-4 text-center">
-          <div className="mb-4">
-            <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
-              SPORT MEET - ITUM
-            </p>
-          </div>
-          <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="w-12 h-px bg-linear-to-r from-transparent to-primary/50"></div>
-            <p className="text-xs text-muted-foreground uppercase tracking-widest">Inter-House Championship</p>
-            <div className="w-12 h-px bg-linear-to-l from-transparent to-primary/50"></div>
-          </div>
-          <p className="text-xs text-muted-foreground">
-            Celebrating athletic excellence, house pride, and the pursuit of glory
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-            <Link
-              href="#"
-              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
-            >
-              <span className='text-neutral-500'>Developed by</span>
-              <span className="blink-dot">•</span>
-              <span>Srinath</span>
-            </Link>
-            <Link
-              href="#"
-              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
-            >
-              <span className='text-neutral-500'>Developed by</span>
-              <span className="blink-dot">•</span>
-              <span>Dhanushka</span>
-            </Link>
-            <Link
-              href="#"
-              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
-            >
-              <span className='text-neutral-500'>Designed by</span>
-              <span className="blink-dot">•</span>
-              <span>Thisara</span>
-            </Link>
-          </div>
-        </div>
-      </footer>
     </main>
   )
 }
