@@ -1,5 +1,6 @@
 'use client'
-import { useEffect, useMemo, useState } from 'react'
+
+import { Suspense, useEffect, useMemo, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,6 +10,24 @@ import { createClient } from '@/lib/supabase/client'
 export const dynamic = 'force-dynamic'
 
 export default function AdminLoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-background">
+          <div className="mx-auto flex min-h-screen max-w-lg items-center px-6">
+            <div className="w-full rounded-2xl border border-border/60 bg-card/50 p-8 shadow-lg">
+              <p className="text-sm text-muted-foreground">Loading...</p>
+            </div>
+          </div>
+        </div>
+      }
+    >
+      <AdminLoginForm />
+    </Suspense>
+  )
+}
+
+function AdminLoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const reason = useMemo(() => searchParams.get('reason'), [searchParams])
