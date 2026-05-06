@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { cubicBezier, motion, type Variants } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
 import { useEvents } from '@/hooks/use-events'
 import { useHouses } from '@/hooks/use-houses'
@@ -41,10 +42,43 @@ export function LiveTicker() {
 
   const currentEvent = ongoingEvents[0]
 
+  const easeOut = cubicBezier(0.22, 1, 0.36, 1)
+  const panelVariants: Variants = {
+    hidden: { opacity: 0, y: 24 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.85,
+        ease: easeOut,
+        delay: index * 0.1,
+      },
+    }),
+  }
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 16 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: easeOut,
+        delay: index * 0.05,
+      },
+    }),
+  }
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       {/* Left 3/4: Latest News Updates */}
-      <div className="lg:col-span-3 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg">
+      <motion.div
+        className="lg:col-span-3 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        custom={0}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={panelVariants}
+      >
         <h2 className="text-lg font-bold text-primary uppercase tracking-wider flex items-center gap-2 mb-4">
           <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse" />
           Live News Updates
@@ -55,9 +89,15 @@ export function LiveTicker() {
           </div>
         ) : (
           <div className="flex flex-col gap-4 w-full flex-1">
-            {news.map((item) => (
-              <div 
-                key={item.id} 
+            {news.map((item, idx) => (
+              <motion.div
+                key={item.id}
+                custom={idx}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.3 }}
+                variants={itemVariants}
+                whileHover={{ y: -4 }}
                 className="backdrop-blur-sm bg-card/40 border border-primary/30 rounded-xl p-6 shadow-[0_0_15px_rgba(212,175,55,0.05)] flex flex-col gap-2 hover:border-primary/60 transition-colors"
               >
                 <div className="flex items-center justify-between">
@@ -74,14 +114,21 @@ export function LiveTicker() {
                 <div className="text-[10px] text-muted-foreground/60 mt-2 text-right font-medium">
                   {new Date(item.created_at).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })}
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         )}
-      </div>
+      </motion.div>
 
       {/* Right 1/4: Current Match Scores */}
-      <div className="lg:col-span-1 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg">
+      <motion.div
+        className="lg:col-span-1 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        custom={1}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        variants={panelVariants}
+      >
         <h2 className="text-lg font-bold text-primary uppercase tracking-wider flex items-center justify-center gap-2 text-center mb-4">
           Live Scores
         </h2>
@@ -94,14 +141,15 @@ export function LiveTicker() {
             <LiveMatchScores event={currentEvent} houses={houses} />
           </div>
         )}
-      </div>
+      </motion.div>
     </div>
   )
 }
 
-function LiveMatchScores({ event, houses }: { event: any, houses: any[] }) {
+function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
   const [matches, setMatches] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
+  const easeOut = cubicBezier(0.22, 1, 0.36, 1)
 
   // Fetch match scores and auto-update every 5 seconds
   useEffect(() => {
@@ -147,8 +195,13 @@ function LiveMatchScores({ event, houses }: { event: any, houses: any[] }) {
             if (!house) return null
 
             return (
-              <div 
-                key={match.id} 
+              <motion.div
+                key={match.id}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{ duration: 0.6, ease: easeOut, delay: idx * 0.06 }}
+                whileHover={{ y: -3 }}
                 className="backdrop-blur-sm bg-card/40 border border-primary/20 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden shadow-lg hover:border-primary/40 transition-colors"
               >
                 {/* House Color Bar */}
@@ -179,7 +232,7 @@ function LiveMatchScores({ event, houses }: { event: any, houses: any[] }) {
                 <div className="text-2xl font-black text-primary drop-shadow-[0_0_5px_rgba(212,175,55,0.3)]">
                   {match.score || 0}
                 </div>
-              </div>
+              </motion.div>
             )
           })}
         </div>

@@ -5,13 +5,23 @@ import { House } from '@/hooks/use-houses'
 interface HouseCardProps {
   house: House
   rank: number
+  className?: string
+  style?: React.CSSProperties
+  dataAnimate?: string
 }
 
-export function HouseCard({ house, rank }: HouseCardProps) {
+export function HouseCard({
+  house,
+  rank,
+  className,
+  style,
+  dataAnimate,
+}: HouseCardProps) {
   return (
     <div
-      className="rounded-lg border border-border bg-card p-6 hover:shadow-lg transition-shadow"
-      style={{ borderLeft: `4px solid ${house.color}` }}
+      data-animate={dataAnimate}
+      className={`rounded-lg border border-border bg-card p-6 hover:shadow-lg transition-shadow ${className ?? ''}`}
+      style={{ borderLeft: `4px solid ${house.color}`, ...style }}
     >
       <div className="flex items-start justify-between mb-4">
         <div>

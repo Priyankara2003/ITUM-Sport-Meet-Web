@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
+import { cubicBezier, motion } from 'framer-motion'
 import { createClient } from '@/lib/supabase/client'
 
 export function HeroSection() {
@@ -71,8 +72,15 @@ export function HeroSection() {
     return () => clearInterval(timer)
   }, [nextEvent])
 
+  const fadeUp = {
+    hidden: { opacity: 0, y: 24 },
+    visible: { opacity: 1, y: 0 },
+  }
+
+  const easeOut = cubicBezier(0.22, 1, 0.36, 1)
+
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background pt-10 pb-18">
+    <div className="relative overflow-hidden bg-linear-to-b from-primary/10 via-background to-background pt-10 pb-18">
       {/* Background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-1/3 w-96 h-96 bg-primary rounded-full blur-3xl" />
@@ -83,7 +91,14 @@ export function HeroSection() {
         {/* Title Section */}
         <div className="mb-16">
           <div className="grid items-center gap-10 lg:grid-cols-2">
-            <div className="text-center lg:text-left">
+            <motion.div
+              className="text-center lg:text-left"
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.3 }}
+              variants={fadeUp}
+              transition={{ duration: 0.95, ease: easeOut, type: 'tween' }}
+            >
               <h1 className="text-4xl md:text-6xl font-black text-foreground leading-tight tracking-tight">
                 <span className="block text-foreground/90">THIS IS YOUR</span>
                 <span className="block text-foreground/70">MOMENT.</span>
@@ -96,9 +111,13 @@ export function HeroSection() {
               </p>
               <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
                 {houseLogos.map((logoUrl, index) => (
-                  <div
+                  <motion.div
                     key={logoUrl}
                     className="relative h-14 w-18 opacity-90"
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 0.9, y: 0 }}
+                    viewport={{ once: true, amount: 0.5 }}
+                    transition={{ duration: 0.6, ease: easeOut, delay: index * 0.08, type: 'tween' }}
                   >
                     <Image
                       src={logoUrl}
@@ -106,36 +125,54 @@ export function HeroSection() {
                       fill
                       className="object-contain"
                     />
-                  </div>
+                  </motion.div>
                 ))}
               </div>
-            </div>
-            <div className="flex flex-col items-center gap-6">
-              <div className="relative w-full max-w-md">
-                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/15 via-transparent to-transparent blur-2xl"></div>
+            </motion.div>
+            <motion.div
+              className="flex flex-col items-center gap-6"
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.95, ease: easeOut, delay: 0.12, type: 'tween' }}
+            >
+              <motion.div
+                className="relative w-full max-w-md"
+                whileHover={{ y: -6 }}
+                transition={{ duration: 0.45, ease: easeOut, type: 'tween' }}
+              >
+                <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-primary/15 via-transparent to-transparent blur-2xl"></div>
                 <div className="relative rounded-3xl bg-card/10 p-0 overflow-hidden mt-[-1vh]">
                   <Image
                     src={heroImageUrl}
                     alt="Hero athlete"
                     width={520}
                     height={280}
+                    loading="eager"
                     className="h-auto w-md"
                   />
                 </div>
-              </div>
+              </motion.div>
               {/* <Link
                 href="/scoreboard"
                 className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(193,35,44,0.35)] transition-all duration-300 border border-primary/60 hover:border-primary text-center"
               >
                 <span>Show Scoreboard</span>
               </Link> */}
-            </div>
+            </motion.div>
           </div>
         </div>
 
         {/* Countdown Timer */}
-        <div className="relative rounded-xl overflow-hidden mb-12 backdrop-blur-sm bg-card/40 border border-primary/30 p-4 sm:p-8">
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5"></div>
+        <motion.div
+          className="relative rounded-xl overflow-hidden mb-12 backdrop-blur-sm bg-card/40 border border-primary/30 p-4 sm:p-8"
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          variants={fadeUp}
+          transition={{ duration: 0.85, ease: easeOut, delay: 0.12, type: 'tween' }}
+        >
+          <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-secondary/5"></div>
 
           <div className="relative">
             <h3 className="text-center text-xs sm:text-sm font-mono tracking-widest text-primary/80 mb-6 sm:mb-8 uppercase">
@@ -149,12 +186,16 @@ export function HeroSection() {
                 { value: minutes, label: 'Minutes' },
                 { value: seconds, label: 'Seconds' },
               ].map((item, idx) => (
-                <div
+                <motion.div
                   key={idx}
                   className="relative group"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.6, ease: easeOut, delay: idx * 0.1, type: 'tween' }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-primary/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
-                  <div className="relative bg-gradient-to-br from-background to-card border border-primary/40 rounded-lg p-4 text-center hover:border-primary/70 transition-colors duration-300">
+                  <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-primary/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
+                  <div className="relative bg-linear-to-br from-background to-card border border-primary/40 rounded-lg p-4 text-center hover:border-primary/70 transition-colors duration-300">
                     <div className="text-3xl md:text-4xl font-black text-primary drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">
                       {String(item.value).padStart(2, '0')}
                     </div>
@@ -162,7 +203,7 @@ export function HeroSection() {
                       {item.label}
                     </div>
                   </div>
-                </div>
+                </motion.div>
               ))}
             </div>
 
@@ -177,29 +218,53 @@ export function HeroSection() {
               </p>
             </div>
           </div>
-        </div>
+        </motion.div>
 
         {/* Call to Action */}
-        <div className="flex flex-col sm:flex-row justify-center gap-4">
-          <Link
-            href="/scoreboard"
-            className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 border border-primary/50 hover:border-primary text-center group"
+        <motion.div
+          className="flex flex-col items-center justify-center gap-4 sm:flex-row"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.4 }}
+          transition={{ duration: 0.75, ease: easeOut, delay: 0.12, type: 'tween' }}
+        >
+          <motion.div
+            className="w-full sm:w-auto"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.4, ease: easeOut, type: 'tween' }}
           >
-            <span>View Live Scores</span>
-          </Link>
-          <Link
-            href="/gallery"
-            className="px-8 py-3 rounded-lg bg-secondary text-secondary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(201,169,97,0.4)] transition-all duration-300 border border-secondary/50 hover:border-secondary text-center group"
+            <Link
+              href="/scoreboard"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 border border-primary/50 hover:border-primary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
+            >
+              <span>View Live Scores</span>
+            </Link>
+          </motion.div>
+          <motion.div
+            className="w-full sm:w-auto"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.4, ease: easeOut, type: 'tween' }}
           >
-            <span>Explore Gallery</span>
-          </Link>
-          <Link
-            href="/schedule"
-            className="px-8 py-3 rounded-lg border border-primary/50 text-primary font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:bg-primary/10 text-center"
+            <Link
+              href="/gallery"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-secondary text-secondary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(201,169,97,0.4)] transition-all duration-300 border border-secondary/50 hover:border-secondary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
+            >
+              <span>Explore Gallery</span>
+            </Link>
+          </motion.div>
+          <motion.div
+            className="w-full sm:w-auto"
+            whileHover={{ y: -4 }}
+            transition={{ duration: 0.4, ease: easeOut, type: 'tween' }}
           >
-            <span>Full Schedule</span>
-          </Link>
-        </div>
+            <Link
+              href="/schedule"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg border border-primary/50 text-primary font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:bg-primary/10 text-center sm:mx-0 sm:min-w-[200px] sm:w-auto"
+            >
+              <span>Full Schedule</span>
+            </Link>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   )
