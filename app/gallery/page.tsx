@@ -1,10 +1,9 @@
 import Link from 'next/link'
 import { GalleryContent } from '@/components/gallery-content'
-import { SuperSeniorsSection } from '@/components/super-seniors-section'
 
 export const metadata = {
   title: 'Gallery & Wall of Fame - VarsityPulse',
-  description: 'Explore photos from events and celebrate super senior athletes',
+  description: 'Explore photos from events and celebrate our champions in the Wall of Fame Gallery.',
 }
 
 export default function GalleryPage() {
@@ -33,13 +32,6 @@ export default function GalleryPage() {
             Event Photos
           </h2>
           <GalleryContent />
-        </section>
-
-        <section>
-          <h2 className="text-3xl font-bold text-foreground mb-8">
-            Super Seniors Spotlight
-          </h2>
-          <SuperSeniorsSection />
         </section>
       </div>
 
