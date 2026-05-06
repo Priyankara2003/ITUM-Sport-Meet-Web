@@ -1,7 +1,6 @@
 'use client'
 
 import Image from 'next/image'
-import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
@@ -74,51 +73,6 @@ export function Navbar() {
     }
   }, [])
 
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY
-
-    if (!apiKey) {
-      setWeatherError(true)
-      return
-    }
-
-    let isCancelled = false
-
-    const fetchWeather = async () => {
-      try {
-        const response = await fetch(
-          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Diyagama&aqi=no`,
-        )
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch weather data')
-        }
-
-        const data = await response.json()
-        const icon = data?.current?.condition?.icon ?? null
-
-        if (!isCancelled) {
-          setWeather({
-            location: data?.location?.name ?? 'Diyagama',
-            tempC: data?.current?.temp_c ?? 0,
-            condition: data?.current?.condition?.text ?? 'Unknown',
-            iconUrl: icon ? (icon.startsWith('//') ? `https:${icon}` : icon) : null,
-          })
-        }
-      } catch {
-        if (!isCancelled) {
-          setWeatherError(true)
-        }
-      }
-    }
-
-    fetchWeather()
-
-    return () => {
-      isCancelled = true
-    }
-  }, [])
-
   return (
     <nav className="sticky top-0 z-50">
       {/* Glassmorphism backdrop */}
@@ -131,15 +85,6 @@ export function Navbar() {
           onClick={() => setIsOpen(false)}
           className="flex items-center gap-3 hover:opacity-90 transition-opacity duration-300"
         >
-          <Image
-            src="https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/meet%20logo.png"
-            alt="Sport Meet ITUM"
-            width={72}
-            height={72}
-            className="h-16 w-auto"
-            priority
-          />
-          <span className="sr-only">Sport Meet ITUM</span>
           <Image
             src="https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/meet%20logo.png"
             alt="Sport Meet ITUM"
@@ -178,10 +123,35 @@ export function Navbar() {
 
         {/* Right Side */}
         <div className="flex items-center gap-4">
-          {/* Right side decoration */}
+          {/* Weather */}
           <div className="flex items-center gap-3">
             <div className="hidden sm:block w-px h-6 bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
-            <div className="text-xs text-primary/60 font-mono tracking-widest">EST 2026</div>
+            <div className="flex items-center gap-2 text-xs text-primary/80 font-mono tracking-wide">
+              {weather?.iconUrl ? (
+                <Image
+                  src={weather.iconUrl}
+                  alt={weather.condition}
+                  width={20}
+                  height={20}
+                  className="h-5 w-5"
+                />
+              ) : (
+                <div className="h-5 w-5 rounded-full bg-primary/20" aria-hidden="true" />
+              )}
+              <span className="hidden sm:inline">
+                {weather?.location ?? 'Diyagama'}
+              </span>
+              <span className="font-semibold">
+                {weather ? `${Math.round(weather.tempC)}°C` : '--°C'}
+              </span>
+              <span className="hidden sm:inline text-primary/60">
+                {weather
+                  ? weather.condition
+                  : weatherError
+                    ? 'Weather unavailable'
+                    : 'Loading weather'}
+              </span>
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -233,61 +203,12 @@ export function Navbar() {
           ))}
         </div>
 
-        {/* Right side decoration */}
-        <div className="flex items-center gap-3">
-          <div className="hidden sm:block w-px h-6 bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
-          <div className="flex items-center gap-2 text-xs text-primary/80 font-mono tracking-wide">
-            {weather?.iconUrl ? (
-              <Image
-                src={weather.iconUrl}
-                alt={weather.condition}
-                width={20}
-                height={20}
-                className="h-5 w-5"
-              />
-            ) : (
-              <div className="h-5 w-5 rounded-full bg-primary/20" aria-hidden="true" />
-            )}
-            <span className="hidden sm:inline">
-              {weather?.location ?? 'Diyagama'}
-            </span>
-            <span className="font-semibold">
-              {weather ? `${Math.round(weather.tempC)}°C` : '--°C'}
-            </span>
-            <span className="hidden sm:inline text-primary/60">
-              {weather
-                ? weather.condition
-                : weatherError
-                  ? 'Weather unavailable'
-                  : 'Loading weather'}
-            </span>
-          </div>
-          <div className="flex items-center gap-2 text-xs text-primary/80 font-mono tracking-wide">
-            {weather?.iconUrl ? (
-              <Image
-                src={weather.iconUrl}
-                alt={weather.condition}
-                width={20}
-                height={20}
-                className="h-5 w-5"
-              />
-            ) : (
-              <div className="h-5 w-5 rounded-full bg-primary/20" aria-hidden="true" />
-            )}
-            <span className="hidden sm:inline">
-              {weather?.location ?? 'Diyagama'}
-            </span>
-            <span className="font-semibold">
-              {weather ? `${Math.round(weather.tempC)}°C` : '--°C'}
-            </span>
-            <span className="hidden sm:inline text-primary/60">
-              {weather
-                ? weather.condition
-                : weatherError
-                  ? 'Weather unavailable'
-                  : 'Loading weather'}
-            </span>
-          </div>
+        <div className="px-4 pb-4 text-xs text-primary/70 font-mono tracking-wide">
+          {weather
+            ? `Diyagama · ${Math.round(weather.tempC)}°C · ${weather.condition}`
+            : weatherError
+              ? 'Weather unavailable'
+              : 'Loading weather...'}
         </div>
       </div>
     </nav>
