@@ -1,5 +1,6 @@
 'use client'
 
+import Image from 'next/image'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 
@@ -8,6 +9,16 @@ export function HeroSection() {
   const [hours, setHours] = useState(0)
   const [minutes, setMinutes] = useState(0)
   const [seconds, setSeconds] = useState(0)
+
+  const heroImageUrl =
+    'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/hero-f1.png'
+
+  const houseLogos = [
+    'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(5).png',
+    'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(7).png',
+    'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(8).png',
+    'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(9).png',
+  ]
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -29,32 +40,64 @@ export function HeroSection() {
   }, [])
 
   return (
-    <div className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background pt-16 pb-20">
+    <div className="relative overflow-hidden bg-gradient-to-b from-primary/10 via-background to-background pt-10 pb-18">
       {/* Background elements */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-20 left-1/3 w-96 h-96 bg-primary rounded-full blur-3xl" />
         <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-secondary rounded-full blur-3xl" />
       </div>
 
-      <div className="relative mx-auto max-w-7xl px-4">
+      <div className="relative mx-auto max-w-7xl px-8">
         {/* Title Section */}
-        <div className="text-center mb-16">
-          <div className="mb-4 inline-block">
-            <div className="text-sm font-mono tracking-widest text-primary/70 mb-2">WELCOME TO</div>
-            <h1 className="text-5xl md:text-7xl font-black text-primary mb-2 text-balance drop-shadow-[0_0_20px_rgba(212,175,55,0.3)]">
-              SPORT MEET
-            </h1>
-            <h2 className="text-2xl md:text-4xl font-bold text-secondary tracking-wider">
-              ITUM
-            </h2>
-          </div>
-          <p className="text-lg md:text-xl text-muted-foreground mb-2 text-balance mt-6">
-            Inter-House Championship of Valor
-          </p>
-          <div className="flex items-center justify-center gap-4 mt-4">
-            <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary/50"></div>
-            <p className="text-xs text-primary/60 uppercase tracking-widest">Compete. Conquer. Celebrate</p>
-            <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary/50"></div>
+        <div className="mb-16">
+          <div className="grid items-center gap-10 lg:grid-cols-2">
+            <div className="text-center lg:text-left">
+              <h1 className="text-4xl md:text-6xl font-black text-foreground leading-tight tracking-tight">
+                <span className="block text-foreground/90">THIS IS YOUR</span>
+                <span className="block text-foreground/70">MOMENT.</span>
+                <span className="block text-foreground/55">MAKE IT</span>
+                <span className="block text-foreground/40">COUNT.</span>
+              </h1>
+              <p className="mt-6 max-w-xl text-base md:text-md text-muted-foreground">
+                Four houses. Hundreds of athletes. One unforgettable sports meet, live at ITUM,
+                right now.
+              </p>
+              <div className="mt-6 flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+                {houseLogos.map((logoUrl, index) => (
+                  <div
+                    key={logoUrl}
+                    className="relative h-14 w-18 opacity-90"
+                  >
+                    <Image
+                      src={logoUrl}
+                      alt={`House logo ${index + 1}`}
+                      fill
+                      className="object-contain"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col items-center gap-6">
+              <div className="relative w-full max-w-md">
+                <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-primary/15 via-transparent to-transparent blur-2xl"></div>
+                <div className="relative rounded-3xl bg-card/10 p-0 overflow-hidden mt-[-1vh]">
+                  <Image
+                    src={heroImageUrl}
+                    alt="Hero athlete"
+                    width={520}
+                    height={280}
+                    className="h-auto w-md"
+                  />
+                </div>
+              </div>
+              {/* <Link
+                href="/scoreboard"
+                className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(193,35,44,0.35)] transition-all duration-300 border border-primary/60 hover:border-primary text-center"
+              >
+                <span>Show Scoreboard</span>
+              </Link> */}
+            </div>
           </div>
         </div>
 
