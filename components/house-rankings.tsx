@@ -124,12 +124,13 @@ export function HouseRankings() {
                     {house.display_name}
                   </h3>
                 </div>
-                <div
+                {/* use after sportmeet */}
+                {/* <div
                   className="mx-auto w-fit rounded-full border px-5 py-2 text-sm font-bold"
                   style={{ borderColor: meta.accent, color: meta.accent }}
                 >
                   {house.total_points.toLocaleString()} PTS
-                </div>
+                </div> */}
                 <div className="text-xs text-muted-foreground">
                   {house.trophies_won} trophies • {house.members_count} members
                 </div>
