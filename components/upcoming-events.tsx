@@ -2,6 +2,7 @@
 
 import { useEvents } from '@/hooks/use-events'
 import { EventCard } from './event-card'
+import { cubicBezier, motion } from 'framer-motion'
 
 export function UpcomingEvents() {
   const { events, loading, error } = useEvents('scheduled')
@@ -30,10 +31,21 @@ export function UpcomingEvents() {
     )
   }
 
+  const easeOut = cubicBezier(0.22, 1, 0.36, 1)
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {events.slice(0, 3).map((event) => (
-        <EventCard key={event.id} event={event} />
+      {events.slice(0, 3).map((event, idx) => (
+        <motion.div
+          key={event.id}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.75, ease: easeOut, delay: idx * 0.08, type: 'tween' }}
+          whileHover={{ y: -4 }}
+        >
+          <EventCard event={event} />
+        </motion.div>
       ))}
     </div>
   )

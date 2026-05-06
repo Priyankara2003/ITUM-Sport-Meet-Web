@@ -1,5 +1,6 @@
 'use client'
 
+import { cubicBezier, motion, type Variants } from 'framer-motion'
 import { useHouses } from '@/hooks/use-houses'
 import { HouseCard } from './house-card'
 
@@ -54,21 +55,54 @@ export function HouseRankings() {
     },
   } as const
 
+  const easeOut = cubicBezier(0.22, 1, 0.36, 1)
+
+  const cardVariants: Variants = {
+    hidden: { opacity: 0, y: 24, scale: 0.98 },
+    visible: (index: number) => ({
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      transition: {
+        duration: 0.85,
+        ease: easeOut,
+        delay: index * 0.08,
+        type: 'tween',
+      },
+    }),
+  }
+
+  const hoverLift = {
+    y: -6,
+    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.35)',
+  }
+
   return (
     <div className="space-y-10">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 items-end">
-        {podiumOrder.map((podiumIndex) => {
+        {podiumOrder.map((podiumIndex, orderIndex) => {
           const house = podium[podiumIndex]
           const rank = podiumIndex + 1
           const meta = podiumMeta[rank as 1 | 2 | 3 | 4]
 
           return (
-            <div
+            <motion.div
               key={house.id}
-              className={`relative overflow-hidden rounded-2xl border border-border bg-gradient-to-br from-black/40 via-card to-black/70 p-6 text-center ${meta.ring} ${meta.height}`}
+              custom={orderIndex}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.2 }}
+              whileHover={hoverLift}
+              variants={cardVariants}
+              className={`relative overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,rgba(0,0,0,0.4),var(--card),rgba(0,0,0,0.7))] p-6 text-center ${meta.ring} ${meta.height}`}
               style={{ borderColor: meta.accent }}
             >
-              <div className="absolute inset-0 opacity-30" style={{ backgroundImage: `radial-gradient(circle at top, ${meta.accent}33, transparent 65%)` }} />
+              <div
+                className="absolute inset-0 opacity-30"
+                style={{
+                  backgroundImage: `radial-gradient(circle at top, ${meta.accent}33, transparent 65%)`,
+                }}
+              />
               <div className="relative space-y-6">
                 <div
                   className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border text-lg font-black"
@@ -100,16 +134,31 @@ export function HouseRankings() {
                   {house.trophies_won} trophies • {house.members_count} members
                 </div>
               </div>
-            </div>
+            </motion.div>
           )
         })}
       </div>
 
       {rest.length > 0 && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {rest.map((house, idx) => (
-            <HouseCard key={house.id} house={house} rank={idx + 5} />
-          ))}
+          {rest.map((house, idx) => {
+            const rank = idx + 5
+            const orderIndex = idx + podiumOrder.length
+
+            return (
+              <motion.div
+                key={house.id}
+                custom={orderIndex}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, amount: 0.2 }}
+                whileHover={hoverLift}
+                variants={cardVariants}
+              >
+                <HouseCard house={house} rank={rank} />
+              </motion.div>
+            )
+          })}
         </div>
       )}
     </div>

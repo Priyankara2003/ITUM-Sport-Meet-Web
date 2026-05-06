@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { ScoreboardContent } from '@/components/scoreboard-content'
+import { MotionItem, MotionSection } from '@/components/motion-section'
 
 export const metadata = {
   title: 'Live Scoreboard - VarsityPulse',
@@ -10,7 +11,7 @@ export default function ScoreboardPage() {
   return (
     <main className="min-h-screen bg-background">
       <header className="border-b border-border bg-card sticky top-0 z-10">
-        <div className="mx-auto max-w-7xl px-4 py-6">
+        <MotionItem className="mx-auto max-w-7xl px-4 py-6" delay={0.05}>
           <Link
             href="/"
             className="text-muted-foreground hover:text-foreground transition-colors mb-4 inline-block"
@@ -21,12 +22,12 @@ export default function ScoreboardPage() {
           <p className="text-muted-foreground mt-2">
             Real-time scores and standings
           </p>
-        </div>
+        </MotionItem>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 py-12">
+      <MotionSection className="mx-auto max-w-7xl px-4 py-12" delay={0.1}>
         <ScoreboardContent />
-      </div>
+      </MotionSection>
     </main>
   )
 }

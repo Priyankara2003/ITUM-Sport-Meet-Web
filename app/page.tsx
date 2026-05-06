@@ -3,6 +3,7 @@ import { HeroSection } from '@/components/hero-section'
 import { LiveTicker } from '@/components/live-ticker'
 import { HouseRankings } from '@/components/house-rankings'
 import { UpcomingEvents } from '@/components/upcoming-events'
+import { MotionItem, MotionSection } from '@/components/motion-section'
 
 export default function Home() {
   return (
@@ -11,30 +12,30 @@ export default function Home() {
 
       <div className="mx-auto max-w-7xl px-4 py-16 space-y-24">
         {/* Live Ticker Section */}
-        <section className="relative z-10">
+        <MotionSection className="relative z-10" delay={0.05}>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
               LIVE ACTION
             </h2>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-r from-transparent to-primary"></div>
               <p className="text-muted-foreground tracking-widest text-sm uppercase">Real-time Updates</p>
-              <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-l from-transparent to-primary"></div>
             </div>
           </div>
           <LiveTicker />
-        </section>
+        </MotionSection>
 
         {/* House Rankings Section */}
-        <section className="relative z-10">
+        <MotionSection className="relative z-10" delay={0.1}>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
               HOUSE STANDINGS
             </h2>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-r from-transparent to-primary"></div>
               <p className="text-muted-foreground tracking-widest text-sm uppercase">Championship Rankings</p>
-              <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-l from-transparent to-primary"></div>
             </div>
           </div>
           <HouseRankings />
@@ -46,18 +47,18 @@ export default function Home() {
               View All Scores
             </Link>
           </div>
-        </section>
+        </MotionSection>
 
         {/* Upcoming Events Section */}
-        <section className="relative z-10">
+        <MotionSection className="relative z-10" delay={0.15}>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
               UPCOMING BATTLES
             </h2>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-r from-transparent to-primary"></div>
               <p className="text-muted-foreground tracking-widest text-sm uppercase">Next Events</p>
-              <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-l from-transparent to-primary"></div>
             </div>
           </div>
           <UpcomingEvents />
@@ -69,59 +70,65 @@ export default function Home() {
               Full Schedule
             </Link>
           </div>
-        </section>
+        </MotionSection>
 
         {/* Featured Sections */}
-        <section className="relative z-10">
+        <MotionSection className="relative z-10" delay={0.2}>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
               DISCOVER
             </h2>
             <div className="flex items-center justify-center gap-4">
-              <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-r from-transparent to-primary"></div>
               <p className="text-muted-foreground tracking-widest text-sm uppercase">Explore More</p>
-              <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary"></div>
+              <div className="w-12 h-px bg-linear-to-l from-transparent to-primary"></div>
             </div>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Link
-              href="/gallery"
-              className="group relative overflow-hidden rounded-xl p-8 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
-              <div className="relative">
-                <h3 className="font-black text-2xl text-primary mb-2 uppercase tracking-wider">Gallery</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Witness the glory. View photos from epic battles and house celebrations
-                </p>
-              </div>
-            </Link>
-            <Link
-              href="/scoreboard"
-              className="group relative overflow-hidden rounded-xl p-8 backdrop-blur-sm bg-card/50 border border-secondary/30 hover:border-secondary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,169,97,0.2)]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-secondary/0 to-secondary/5 group-hover:to-secondary/15 transition-all duration-300"></div>
-              <div className="relative">
-                <h3 className="font-black text-2xl text-secondary mb-2 uppercase tracking-wider">Scoreboard</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Track the battle. Check detailed scores and compete for supremacy
-                </p>
-              </div>
-            </Link>
-            <Link
-              href="/schedule"
-              className="group relative overflow-hidden rounded-xl p-8 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
-              <div className="relative">
-                <h3 className="font-black text-2xl text-primary mb-2 uppercase tracking-wider">Schedule</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  Plan your conquest. Find upcoming events and prepare for glory
-                </p>
-              </div>
-            </Link>
+            <MotionItem delay={0.05} className="h-full">
+              <Link
+                href="/gallery"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+              >
+                <div className="absolute inset-0 bg-linear-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
+                <div className="relative">
+                  <h3 className="font-black text-2xl text-primary mb-2 uppercase tracking-wider">Gallery</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Witness the glory. View photos from epic battles and house celebrations
+                  </p>
+                </div>
+              </Link>
+            </MotionItem>
+            <MotionItem delay={0.12} className="h-full">
+              <Link
+                href="/scoreboard"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-secondary/30 hover:border-secondary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,169,97,0.2)]"
+              >
+                <div className="absolute inset-0 bg-linear-to-br from-secondary/0 to-secondary/5 group-hover:to-secondary/15 transition-all duration-300"></div>
+                <div className="relative">
+                  <h3 className="font-black text-2xl text-secondary mb-2 uppercase tracking-wider">Scoreboard</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Track the battle. Check detailed scores and compete for supremacy
+                  </p>
+                </div>
+              </Link>
+            </MotionItem>
+            <MotionItem delay={0.18} className="h-full">
+              <Link
+                href="/schedule"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+              >
+                <div className="absolute inset-0 bg-linear-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
+                <div className="relative">
+                  <h3 className="font-black text-2xl text-primary mb-2 uppercase tracking-wider">Schedule</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    Plan your conquest. Find upcoming events and prepare for glory
+                  </p>
+                </div>
+              </Link>
+            </MotionItem>
           </div>
-        </section>
+        </MotionSection>
       </div>
 
       {/* Footer */}
@@ -133,13 +140,39 @@ export default function Home() {
             </p>
           </div>
           <div className="flex items-center justify-center gap-4 mb-4">
-            <div className="w-12 h-px bg-gradient-to-r from-transparent to-primary/50"></div>
+            <div className="w-12 h-px bg-linear-to-r from-transparent to-primary/50"></div>
             <p className="text-xs text-muted-foreground uppercase tracking-widest">Inter-House Championship</p>
-            <div className="w-12 h-px bg-gradient-to-l from-transparent to-primary/50"></div>
+            <div className="w-12 h-px bg-linear-to-l from-transparent to-primary/50"></div>
           </div>
           <p className="text-xs text-muted-foreground">
             Celebrating athletic excellence, house pride, and the pursuit of glory
           </p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Developed by</span>
+              <span className="blink-dot">•</span>
+              <span>Srinath</span>
+            </Link>
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Developed by</span>
+              <span className="blink-dot">•</span>
+              <span>Dhanushka</span>
+            </Link>
+            <Link
+              href="#"
+              className="rounded-full border border-primary/30 bg-card/60 px-4 py-2 text-xs font-semibold text-primary/90 transition-all duration-300 hover:border-primary hover:text-primary"
+            >
+              <span className='text-neutral-500'>Designed by</span>
+              <span className="blink-dot">•</span>
+              <span>Thisara</span>
+            </Link>
+          </div>
         </div>
       </footer>
     </main>
