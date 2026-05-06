@@ -15,6 +15,7 @@ type WeatherState = {
 
 export function Navbar() {
   const pathname = usePathname()
+  const isAdminRoute = pathname.startsWith('/admin')
   const [isOpen, setIsOpen] = useState(false)
   const [weather, setWeather] = useState<WeatherState | null>(null)
   const [weatherError, setWeatherError] = useState(false)
@@ -29,6 +30,7 @@ export function Navbar() {
   ]
 
   useEffect(() => {
+    if (isAdminRoute) return
     const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY
 
     if (!apiKey) {
@@ -71,7 +73,11 @@ export function Navbar() {
     return () => {
       isCancelled = true
     }
-  }, [])
+  }, [isAdminRoute])
+
+  if (isAdminRoute) {
+    return null
+  }
 
   return (
     <nav className="sticky top-0 z-50">
