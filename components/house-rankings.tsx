@@ -1,6 +1,7 @@
 'use client'
 
 import { cubicBezier, motion, type Variants } from 'framer-motion'
+import Image from 'next/image'
 import { useHouses } from '@/hooks/use-houses'
 import { HouseCard } from './house-card'
 
@@ -73,8 +74,9 @@ export function HouseRankings() {
   }
 
   const hoverLift = {
-    y: -6,
-    boxShadow: '0 20px 40px rgba(0, 0, 0, 0.35)',
+    y: -4,
+    boxShadow: '0 12px 24px rgba(0, 0, 0, 0.1)',
+    transition: { duration: 0.3, ease: easeOut },
   }
 
   return (
@@ -94,27 +96,36 @@ export function HouseRankings() {
               viewport={{ once: true, amount: 0.2 }}
               whileHover={hoverLift}
               variants={cardVariants}
-              className={`relative overflow-hidden rounded-2xl border border-border bg-[linear-gradient(135deg,rgba(0,0,0,0.4),var(--card),rgba(0,0,0,0.7))] p-6 text-center ${meta.ring} ${meta.height}`}
-              style={{ borderColor: meta.accent }}
+              className={`relative overflow-hidden rounded-2xl border bg-white p-6 text-center shadow-sm hover:shadow-md transition-shadow ${meta.height}`}
+              style={{ borderColor: house.color || meta.accent }}
             >
               <div
                 className="absolute inset-0 opacity-30"
                 style={{
-                  backgroundImage: `radial-gradient(circle at top, ${meta.accent}33, transparent 65%)`,
+                  backgroundImage: `radial-gradient(circle at top, ${house.color || meta.accent}33, transparent 65%)`,
                 }}
               />
               <div className="relative space-y-6">
                 <div
                   className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border text-lg font-black"
-                  style={{ borderColor: meta.accent, color: meta.accent }}
+                  style={{ borderColor: house.color || meta.accent, color: house.color || meta.accent }}
                 >
                   #{rank}
                 </div>
                 <div
-                  className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl text-3xl font-black"
-                  style={{ backgroundColor: `${meta.accent}22`, color: meta.accent }}
+                  className="mx-auto flex h-20 w-20 relative overflow-hidden items-center justify-center rounded-2xl text-3xl font-black"
+                  style={{ backgroundColor: `${house.color || meta.accent}22`, color: house.color || meta.accent }}
                 >
-                  {house.display_name[0]}
+                  {house.logo_url ? (
+                    <Image
+                      src={house.logo_url}
+                      alt={`${house.display_name} logo`}
+                      fill
+                      className="object-contain p-2"
+                    />
+                  ) : (
+                    house.display_name[0]
+                  )}
                 </div>
                 <div>
                   <p className="text-xs font-semibold tracking-[0.3em] text-muted-foreground">
@@ -127,7 +138,7 @@ export function HouseRankings() {
                 {/* use after sportmeet */}
                 {/* <div
                   className="mx-auto w-fit rounded-full border px-5 py-2 text-sm font-bold"
-                  style={{ borderColor: meta.accent, color: meta.accent }}
+                  style={{ borderColor: house.color || meta.accent, color: house.color || meta.accent }}
                 >
                   {house.total_points.toLocaleString()} PTS
                 </div> */}

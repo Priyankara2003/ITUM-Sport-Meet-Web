@@ -141,11 +141,11 @@ function EventTimelineItem({ event }: { event: Event }) {
 
   const statusColors = {
     scheduled:
-      'bg-blue-500/20 border-blue-500/50 text-blue-300 before:bg-blue-500',
+      'bg-blue-50 border-blue-200 text-blue-700 before:bg-blue-500',
     ongoing:
-      'bg-green-500/20 border-green-500/50 text-green-300 before:bg-green-500',
+      'bg-green-50 border-green-200 text-green-700 before:bg-green-500',
     completed:
-      'bg-gray-500/20 border-gray-500/50 text-gray-300 before:bg-gray-500',
+      'bg-gray-50 border-gray-200 text-gray-600 before:bg-gray-400',
   }
 
   const statusLabels = {
@@ -185,7 +185,7 @@ function EventTimelineItem({ event }: { event: Event }) {
           </div>
         </div>
 
-        <div className="mt-3 pt-3 border-t border-white/10 text-xs space-y-1">
+        <div className="mt-3 pt-3 border-t border-black/10 text-xs text-muted-foreground space-y-1">
           {event.location && <p>Location: {event.location}</p>}
           <p>Points Available: {event.points_available}</p>
         </div>

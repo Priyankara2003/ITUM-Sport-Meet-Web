@@ -9,9 +9,9 @@ interface EventCardProps {
 
 export function EventCard({ event }: EventCardProps) {
   const statusColors = {
-    scheduled: 'bg-blue-500/20 text-blue-300 border-blue-500/30',
-    ongoing: 'bg-green-500/20 text-green-300 border-green-500/30',
-    completed: 'bg-gray-500/20 text-gray-300 border-gray-500/30',
+    scheduled: 'bg-blue-50 text-blue-700 border-blue-200',
+    ongoing: 'bg-green-50 text-green-700 border-green-200',
+    completed: 'bg-gray-50 text-gray-600 border-gray-200',
   }
 
   const statusLabels = {

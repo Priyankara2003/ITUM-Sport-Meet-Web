@@ -1,6 +1,7 @@
 'use client'
 
 import { House } from '@/hooks/use-houses'
+import Image from 'next/image'
 
 interface HouseCardProps {
   house: House
@@ -33,10 +34,19 @@ export function HouseCard({
           </h3>
         </div>
         <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center text-white font-bold text-lg"
+          className="w-12 h-12 relative overflow-hidden rounded-lg flex items-center justify-center text-white font-bold text-lg"
           style={{ backgroundColor: house.color }}
         >
-          {house.display_name[0]}
+          {house.logo_url ? (
+            <Image
+              src={house.logo_url}
+              alt={`${house.display_name} logo`}
+              fill
+              className="object-contain p-1.5"
+            />
+          ) : (
+            house.display_name[0]
+          )}
         </div>
       </div>
 

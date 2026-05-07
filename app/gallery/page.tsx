@@ -10,11 +10,11 @@ export const metadata = {
 export default function GalleryPage() {
   return (
     <main className="min-h-screen bg-background">
-      <header className="border-b border-border bg-card sticky top-0 z-10">
+      <header className="border-b border-border bg-card">
         <MotionItem className="mx-auto max-w-7xl px-4 py-6" delay={0.05}>
           <Link
             href="/"
-            className="text-muted-foreground hover:text-foreground transition-colors mb-4 inline-block"
+            className="text-muted-foreground mb-4 inline-block text-sm"
           >
             ← Back to Home
           </Link>

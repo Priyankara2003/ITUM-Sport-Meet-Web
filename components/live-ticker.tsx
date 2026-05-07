@@ -17,13 +17,25 @@ export function LiveTicker() {
   useEffect(() => {
     const fetchNews = async () => {
       const supabase = createClient()
-      const { data } = await supabase
+      // Try to fetch with is_pinned sorting first
+      const { data, error } = await supabase
         .from('news_updates')
         .select('*')
+        .order('is_pinned', { ascending: false, nullsLast: true })
         .order('created_at', { ascending: false })
-        .limit(5)
+        .limit(10)
       
-      if (data) setNews(data)
+      if (error) {
+        // Fallback if is_pinned column doesn't exist in the database yet
+        const fallback = await supabase
+          .from('news_updates')
+          .select('*')
+          .order('created_at', { ascending: false })
+          .limit(10)
+        if (fallback.data) setNews(fallback.data)
+      } else if (data) {
+        setNews(data)
+      }
       setNewsLoading(false)
     }
 
@@ -72,7 +84,7 @@ export function LiveTicker() {
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       {/* Left 3/4: Latest News Updates */}
       <motion.div
-        className="lg:col-span-3 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        className="lg:col-span-3 flex flex-col h-[400px] lg:h-[500px] bg-card border border-border rounded-2xl p-6 shadow-sm"
         custom={0}
         initial="hidden"
         whileInView="visible"
@@ -88,7 +100,7 @@ export function LiveTicker() {
             No recent news available.
           </div>
         ) : (
-          <div className="flex flex-col gap-4 w-full flex-1">
+          <div className="flex flex-col gap-4 w-full flex-1 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
             {news.map((item, idx) => (
               <motion.div
                 key={item.id}
@@ -98,14 +110,21 @@ export function LiveTicker() {
                 viewport={{ once: true, amount: 0.3 }}
                 variants={itemVariants}
                 whileHover={{ y: -4 }}
-                className="backdrop-blur-sm bg-card/40 border border-primary/30 rounded-xl p-6 shadow-[0_0_15px_rgba(207,6,30,0.05)] flex flex-col gap-2 hover:border-primary/60 transition-colors"
+                className="bg-white border border-border rounded-xl p-6 shadow-sm flex flex-col gap-2 hover:border-primary/40 transition-colors"
               >
-                <div className="flex items-center justify-between">
-                  <h3 className="font-bold text-primary flex items-center gap-2 text-base sm:text-lg">
+                <div className="flex items-start justify-between gap-4">
+                  <h3 className="font-bold text-foreground flex items-center gap-2 text-base sm:text-lg">
+                    {item.is_pinned && (
+                      <span className="shrink-0" title="Pinned News">📌</span>
+                    )}
                     {item.title}
                   </h3>
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-secondary bg-secondary/10 px-2 py-1 rounded">
-                    News Flash
+                  <span className={`shrink-0 text-[10px] font-bold uppercase tracking-wider px-2 py-1 rounded ${
+                    item.is_pinned 
+                      ? 'text-blue-700 bg-blue-50 border border-blue-100' 
+                      : 'text-gray-600 bg-gray-100 border border-gray-200'
+                  }`}>
+                    {item.is_pinned ? 'PINNED' : 'UPDATE'}
                   </span>
                 </div>
                 <p className="text-sm md:text-base text-foreground mt-1 whitespace-pre-wrap leading-relaxed">
@@ -122,7 +141,7 @@ export function LiveTicker() {
 
       {/* Right 1/4: Current Match Scores */}
       <motion.div
-        className="lg:col-span-1 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        className="lg:col-span-1 flex flex-col h-[400px] lg:h-[500px] bg-card border border-border rounded-2xl p-6 shadow-sm"
         custom={1}
         initial="hidden"
         whileInView="visible"
@@ -137,7 +156,7 @@ export function LiveTicker() {
             No match ongoing right now.
           </div>
         ) : (
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col overflow-hidden">
             <LiveMatchScores event={currentEvent} houses={houses} />
           </div>
         )}
@@ -173,15 +192,15 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
 
   if (loading) {
     return (
-      <div className="backdrop-blur-sm bg-card/40 border border-primary/30 rounded-xl p-6 text-muted-foreground text-center text-sm shadow-lg">
+      <div className="bg-white border border-border rounded-xl p-6 text-muted-foreground text-center text-sm shadow-sm">
         Loading live scores...
       </div>
     )
   }
 
   return (
-    <div className="flex flex-col gap-3">
-      <div className="backdrop-blur-sm bg-primary/10 border border-primary/30 rounded-xl p-3 text-center mb-2 shadow-[0_0_10px_rgba(207,6,30,0.1)]">
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
+      <div className="bg-primary/10 border border-primary/20 rounded-xl p-3 text-center mb-2 shadow-sm">
         <h3 className="font-bold text-primary text-sm line-clamp-1">{event.name}</h3>
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Current Match</p>
       </div>
@@ -189,7 +208,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
       {matches.length === 0 ? (
         <div className="text-muted-foreground text-sm text-center">Scores not updated yet.</div>
       ) : (
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-3 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent pb-2">
           {matches.map((match, idx) => {
             const house = houses.find((h) => h.id === match.house_id)
             if (!house) return null
@@ -202,7 +221,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
                 viewport={{ once: true, amount: 0.4 }}
                 transition={{ duration: 0.6, ease: easeOut, delay: idx * 0.06 }}
                 whileHover={{ y: -3 }}
-                className="backdrop-blur-sm bg-card/40 border border-primary/20 rounded-xl p-3 flex items-center gap-3 relative overflow-hidden shadow-lg hover:border-primary/40 transition-colors"
+                className="bg-white border border-border rounded-xl p-3 flex items-center gap-3 relative overflow-hidden shadow-sm hover:border-primary/40 transition-colors"
               >
                 {/* House Color Bar */}
                 <div 
@@ -229,7 +248,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
                 </div>
                 
                 {/* Score */}
-                <div className="text-2xl font-black text-primary drop-shadow-[0_0_5px_rgba(207,6,30,0.3)]">
+                <div className="text-2xl font-black text-primary">
                   {match.score || 0}
                 </div>
               </motion.div>
