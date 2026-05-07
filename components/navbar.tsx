@@ -38,8 +38,8 @@ export function Navbar() {
       {/* Background with scroll effect */}
       <div
         className={`absolute inset-0 transition-all duration-300 ${isScrolled
-          ? 'bg-[#961300]/90 backdrop-blur-md shadow-md'
-          : 'bg-[#961300] shadow-none'
+          ? 'bg-[#961300]/85 backdrop-blur-md shadow-md'
+          : 'bg-linear-to-r from-[#961300] via-[#4a0a00] to-black shadow-none'
           }`}
       ></div>
 

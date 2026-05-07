@@ -4,6 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { AnimatePresence, cubicBezier, motion } from 'framer-motion'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 
 export function HeroSection() {
   const [sliderIndex, setSliderIndex] = useState(0)
@@ -11,69 +12,37 @@ export function HeroSection() {
   const slides = [
     {
       image: '/images/hero-slider/001.jpg',
-      title: 'VANGUARD RACING MAKES HISTORY',
-      subtitle: 'AT THE INAUGURAL GRIDX STEM MOTORSPORT CHALLENGE',
-      description: "The GridX STEM Motorsport Challenge 2025, Sri Lanka's first-ever STEM competition of its kind, concluded with roaring success.",
-      buttonText: 'READ MORE',
+      title: 'FOUR HOUSES. ONE ULTIMATE GLORY.',
+      subtitle: 'WITNESS THE BATTLE FOR THE 2026 CHAMPIONSHIP',
+      description: 'From the strength of Horus to the fire of Phoenix, every house is ready to leave its mark. Track the live scoreboard and see which house will rise to claim the prestigious overall trophy this year.',
+      buttonText: 'VIEW SCOREBOARD',
       link: '#'
     },
     {
       image: '/images/hero-slider/002.jpg',
-      title: 'THE ULTIMATE SHOWDOWN BEGINS',
-      subtitle: 'INTER-HOUSE CHAMPIONSHIP 2026',
-      description: 'Witness the glory as four houses battle for the ultimate championship title. The passion, the drive, and the victory await.',
-      buttonText: 'READ MORE',
+      title: 'REDEFINING THE LIMITS OF SPEED',
+      subtitle: 'A SHOWCASE OF ELITE STUDENT ATHLETICISM',
+      description: 'Precision, power, and performance take center stage. Join us at the Mahinda Rajapaksa Stadium to support our student-athletes as they break records and set new benchmarks for sporting excellence.',
+      buttonText: 'SEE SCHEDULE',
       link: '#'
     },
     {
       image: '/images/hero-slider/017.jpg',
-      title: 'ATHLETES READY FOR GLORY',
-      subtitle: 'PUSHING THE LIMITS OF HUMAN POTENTIAL',
-      description: 'Months of rigorous training come down to this moment. Who will emerge victorious and claim the ultimate prize?',
-      buttonText: 'READ MORE',
+      title: 'BUILDING LEGACIES BEYOND ACADEMICS',
+      subtitle: 'STRENGTHENING BONDS THROUGH COMPETITIVE SPORT',
+      description: 'The ITUM Sports Meet is more than a competition; it is a celebration of teamwork and leadership. Be part of the tradition that brings together students, staff, and alumni in the spirit of sportsmanship.',
+      buttonText: 'BROWSE GALLERY',
       link: '#'
     },
     {
       image: '/images/hero-slider/027.jpg',
-      title: 'A CELEBRATION OF SPORTSMANSHIP',
-      subtitle: 'UNITING STUDENTS THROUGH COMPETITION',
-      description: 'Beyond the medals and trophies lies the true spirit of sportsmanship. A day of unity, passion, and unforgettable memories.',
-      buttonText: 'READ MORE',
-      link: '#'
-    },
-    {
-      image: '/images/hero-slider/DSC06115%20(1).jpg',
-      title: 'BREAKING RECORDS, MAKING HISTORY',
-      subtitle: 'A NEW ERA OF EXCELLENCE AT ITUM',
-      description: 'The track is set, the crowds are cheering. Prepare to witness history in the making at the grand finale.',
+      title: 'THE ARENA OF GREATNESS AWAITS',
+      subtitle: 'WHERE DREAMS COLLIDE WITH DETERMINATION',
+      description: 'The wait is over. The field is ready. Dive into the heart of the action as the next generation of leaders competes for the highest sporting honors in the institute’s history.',
       buttonText: 'READ MORE',
       link: '#'
     },
   ]
-
-  const houseLogos = [
-    {
-      name: 'Phoenix',
-      logoUrl: 'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(5).png',
-      color: '#cf061e',
-    },
-    {
-      name: 'Draghar',
-      logoUrl: 'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(7).png',
-      color: '#1d4ed8',
-    },
-    {
-      name: 'Griffin',
-      logoUrl: 'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(8).png',
-      color: '#15803d',
-    },
-    {
-      name: 'Horus',
-      logoUrl: 'https://iqwpccaklgcetfwbkalb.supabase.co/storage/v1/object/public/images/Neww%20(9).png',
-      color: '#eab308',
-    },
-  ]
-
 
   useEffect(() => {
     if (slides.length <= 1) return
@@ -84,6 +53,14 @@ export function HeroSection() {
 
     return () => clearInterval(sliderTimer)
   }, [slides.length])
+
+  const goToPrevious = () => {
+    setSliderIndex((prev) => (prev - 1 + slides.length) % slides.length)
+  }
+
+  const goToNext = () => {
+    setSliderIndex((prev) => (prev + 1) % slides.length)
+  }
 
   const easeOut = cubicBezier(0.22, 1, 0.36, 1)
 
@@ -111,11 +88,11 @@ export function HeroSection() {
         </AnimatePresence>
         
         {/* Gradient overlays for text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent" />
         <div className="absolute inset-0 bg-black/40 md:hidden" /> {/* Extra dark for mobile */}
       </div>
 
-      <div className="relative z-20 mx-auto max-w-7xl px-6 md:px-8 h-[600px] md:h-[700px] flex items-center">
+      <div className="relative z-20 mx-auto max-w-7xl px-6 md:px-8 h-150 md:h-175 flex items-center">
         {/* Text Section */}
         <div className="w-full md:w-2/3 lg:w-1/2 pt-10">
           <AnimatePresence mode="wait">
@@ -149,41 +126,23 @@ export function HeroSection() {
           </AnimatePresence>
         </div>
 
-        {/* House Logos */}
-        <div className="absolute bottom-8 left-0 right-0 flex flex-wrap justify-center md:justify-end md:right-8 md:left-auto gap-4 sm:gap-6 px-4">
-          {houseLogos.map((house, index) => (
-            <motion.div
-              key={house.logoUrl}
-              className="group relative flex flex-col items-center gap-2"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease: easeOut, delay: 0.5 + index * 0.08, type: 'tween' }}
-            >
-              <div className="relative flex h-16 w-16 md:h-20 md:w-20 items-center justify-center rounded-full border-2 border-white/20 bg-black/40 backdrop-blur-md shadow-xl transition-all duration-300 group-hover:scale-110 group-hover:bg-black/60">
-                <div 
-                  className="absolute inset-[-2px] rounded-full opacity-0 transition-opacity duration-300 group-hover:opacity-100"
-                  style={{
-                    boxShadow: `0 0 20px ${house.color}66`,
-                    borderColor: house.color,
-                    borderWidth: '2px',
-                    borderStyle: 'solid'
-                  }}
-                />
-                <Image
-                  src={house.logoUrl}
-                  alt={`${house.name} logo`}
-                  fill
-                  className="object-contain p-2.5 md:p-3 drop-shadow-md z-10"
-                />
-              </div>
-              <span 
-                className="absolute -top-8 text-center text-[10px] md:text-xs font-bold uppercase tracking-[0.15em] text-white bg-black/80 px-3 py-1.5 rounded-md backdrop-blur-sm opacity-0 transition-all duration-300 group-hover:-translate-y-2 group-hover:opacity-100 shadow-lg"
-                style={{ borderBottom: `2px solid ${house.color}` }}
-              >
-                {house.name}
-              </span>
-            </motion.div>
-          ))}
+        <div className="pointer-events-none absolute inset-0 z-30">
+          <button
+            type="button"
+            onClick={goToPrevious}
+            aria-label="Previous image"
+            className="pointer-events-auto absolute left-3 bottom-6 rounded-full border border-white/20 bg-black/35 p-3 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/70 md:left-6 md:bottom-8 lg:left-8"
+          >
+            <ChevronLeft className="h-6 w-6" />
+          </button>
+          <button
+            type="button"
+            onClick={goToNext}
+            aria-label="Next image"
+            className="pointer-events-auto absolute right-3 bottom-6 rounded-full border border-white/20 bg-black/35 p-3 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/70 md:right-6 md:bottom-8 lg:right-8"
+          >
+            <ChevronRight className="h-6 w-6" />
+          </button>
         </div>
       </div>
     </div>
