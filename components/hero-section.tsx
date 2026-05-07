@@ -16,7 +16,7 @@ export function HeroSection() {
       subtitle: 'WITNESS THE BATTLE FOR THE 2026 CHAMPIONSHIP',
       description: 'From the strength of Horus to the fire of Phoenix, every house is ready to leave its mark. Track the live scoreboard and see which house will rise to claim the prestigious overall trophy this year.',
       buttonText: 'VIEW SCOREBOARD',
-      link: '#'
+      link: '/scoreboard'
     },
     {
       image: '/images/hero-slider/002.jpg',
@@ -24,7 +24,7 @@ export function HeroSection() {
       subtitle: 'A SHOWCASE OF ELITE STUDENT ATHLETICISM',
       description: 'Precision, power, and performance take center stage. Join us at the Mahinda Rajapaksa Stadium to support our student-athletes as they break records and set new benchmarks for sporting excellence.',
       buttonText: 'SEE SCHEDULE',
-      link: '#'
+      link: '/schedule'
     },
     {
       image: '/images/hero-slider/017.jpg',
@@ -32,7 +32,7 @@ export function HeroSection() {
       subtitle: 'STRENGTHENING BONDS THROUGH COMPETITIVE SPORT',
       description: 'The ITUM Sports Meet is more than a competition; it is a celebration of teamwork and leadership. Be part of the tradition that brings together students, staff, and alumni in the spirit of sportsmanship.',
       buttonText: 'BROWSE GALLERY',
-      link: '#'
+      link: '/gallery'
     },
     {
       image: '/images/hero-slider/027.jpg',
@@ -42,15 +42,21 @@ export function HeroSection() {
       buttonText: 'READ MORE',
       link: '#'
     },
+    {
+      image: '/images/hero-slider/DSC06115 (1).jpg',
+      title: 'UNLEASH THE SPIRIT OF CHAMPIONS',
+      subtitle: 'AT THE ANNUAL ITUM INTER-HOUSE SPORTS MEET',
+      description: 'Experience a day where talent meets tenacity. Watch as our four houses compete in a thrilling display of track and field excellence, celebrating the unity and athletic prowess of the ITUM community.',
+      buttonText: 'EXPLORE EVENTS',
+      link: '/events'
+    },
   ]
 
   useEffect(() => {
     if (slides.length <= 1) return
-
     const sliderTimer = setInterval(() => {
       setSliderIndex((prev) => (prev + 1) % slides.length)
     }, 5000)
-
     return () => clearInterval(sliderTimer)
   }, [slides.length])
 
@@ -65,8 +71,9 @@ export function HeroSection() {
   const easeOut = cubicBezier(0.22, 1, 0.36, 1)
 
   return (
-    <div className="relative overflow-hidden bg-background">
-      {/* Background slider */}
+    <div className="relative overflow-hidden bg-background w-full">
+      
+      {/* 1. Background slider (Z-0) */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence initial={false} mode="sync">
           <motion.div
@@ -87,13 +94,34 @@ export function HeroSection() {
           </motion.div>
         </AnimatePresence>
         
-        {/* Gradient overlays for text readability */}
-        <div className="absolute inset-0 bg-linear-to-r from-black/90 via-black/60 to-transparent" />
-        <div className="absolute inset-0 bg-black/40 md:hidden" /> {/* Extra dark for mobile */}
+        {/* Gradients */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/60 to-transparent" />
+        <div className="absolute inset-0 bg-black/40 md:hidden" />
       </div>
 
-      <div className="relative z-20 mx-auto max-w-7xl px-6 md:px-8 h-150 md:h-175 flex items-center">
-        {/* Text Section */}
+      {/* 2. NAVIGATION ARROWS (Z-40) - Pinned to absolute sides and middle */}
+      <div className="pointer-events-none absolute inset-0 z-40 flex items-center justify-between px-4 md:px-6">
+        <button
+          type="button"
+          onClick={goToPrevious}
+          aria-label="Previous image"
+          className="pointer-events-auto rounded-full border border-white/20 bg-black/30 p-3 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:bg-black/70 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+        >
+          <ChevronLeft className="h-8 w-8" />
+        </button>
+        
+        <button
+          type="button"
+          onClick={goToNext}
+          aria-label="Next image"
+          className="pointer-events-auto rounded-full border border-white/20 bg-black/30 p-3 text-white shadow-2xl backdrop-blur-md transition-all duration-300 hover:bg-black/70 hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/50"
+        >
+          <ChevronRight className="h-8 w-8" />
+        </button>
+      </div>
+
+      {/* 3. CONTENT SECTION (Z-20) - Max-width constrained */}
+      <div className="relative z-20 mx-auto max-w-7xl px-6 md:px-16 h-150 md:h-175 flex items-center">
         <div className="w-full md:w-2/3 lg:w-1/2 pt-10">
           <AnimatePresence mode="wait">
             <motion.div
@@ -117,32 +145,13 @@ export function HeroSection() {
               <div className="mt-6">
                 <Link
                   href={slides[sliderIndex].link}
-                  className="inline-block bg-black hover:bg-black/85 text-white font-bold tracking-wider uppercase text-sm px-8 py-3 rounded-sm transition-all border border-black"
+                  className="inline-block bg-black hover:bg-white hover:text-black text-white font-bold tracking-wider uppercase text-sm px-8 py-3 rounded-sm transition-all border border-white/20"
                 >
                   {slides[sliderIndex].buttonText}
                 </Link>
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
-
-        <div className="pointer-events-none absolute inset-0 z-30">
-          <button
-            type="button"
-            onClick={goToPrevious}
-            aria-label="Previous image"
-            className="pointer-events-auto absolute left-3 bottom-6 rounded-full border border-white/20 bg-black/35 p-3 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/70 md:left-6 md:bottom-8 lg:left-8"
-          >
-            <ChevronLeft className="h-6 w-6" />
-          </button>
-          <button
-            type="button"
-            onClick={goToNext}
-            aria-label="Next image"
-            className="pointer-events-auto absolute right-3 bottom-6 rounded-full border border-white/20 bg-black/35 p-3 text-white shadow-xl backdrop-blur-md transition-all duration-300 hover:bg-black/60 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/70 md:right-6 md:bottom-8 lg:right-8"
-          >
-            <ChevronRight className="h-6 w-6" />
-          </button>
         </div>
       </div>
     </div>
