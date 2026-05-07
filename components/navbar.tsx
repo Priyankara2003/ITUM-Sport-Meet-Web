@@ -8,6 +8,7 @@ import { useState } from 'react'
 
 export function Navbar() {
   const pathname = usePathname()
+  const isAdminRoute = pathname.startsWith('/admin')
   const [isOpen, setIsOpen] = useState(false)
 
   const isActive = (path: string) => pathname === path
@@ -19,11 +20,61 @@ export function Navbar() {
     { href: '/gallery', label: 'GALLERY' },
   ]
 
+  useEffect(() => {
+    if (isAdminRoute) return
+    const apiKey = process.env.NEXT_PUBLIC_WEATHER_API_KEY
+
+    if (!apiKey) {
+      setWeatherError(true)
+      return
+    }
+
+    let isCancelled = false
+
+    const fetchWeather = async () => {
+      try {
+        const response = await fetch(
+          `https://api.weatherapi.com/v1/current.json?key=${apiKey}&q=Diyagama&aqi=no`,
+        )
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch weather data')
+        }
+
+        const data = await response.json()
+        const icon = data?.current?.condition?.icon ?? null
+
+        if (!isCancelled) {
+          setWeather({
+            location: data?.location?.name ?? 'Diyagama',
+            tempC: data?.current?.temp_c ?? 0,
+            condition: data?.current?.condition?.text ?? 'Unknown',
+            iconUrl: icon ? (icon.startsWith('//') ? `https:${icon}` : icon) : null,
+          })
+        }
+      } catch {
+        if (!isCancelled) {
+          setWeatherError(true)
+        }
+      }
+    }
+
+    fetchWeather()
+
+    return () => {
+      isCancelled = true
+    }
+  }, [isAdminRoute])
+
+  if (isAdminRoute) {
+    return null
+  }
+
   return (
     <nav className="sticky top-0 z-50">
       {/* Glassmorphism backdrop */}
       <div className="absolute inset-0 backdrop-blur-md bg-background/80 border-b border-primary/20"></div>
-      
+
       <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-between h-20">
         {/* Logo/Branding */}
         <Link
@@ -50,11 +101,10 @@ export function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`relative px-4 py-2 font-semibold text-xs tracking-widest transition-all duration-300 group ${
-                  isActive(item.href)
+                className={`relative px-4 py-2 font-semibold text-xs tracking-widest transition-all duration-300 group ${isActive(item.href)
                     ? 'text-primary'
                     : 'text-muted-foreground hover:text-primary'
-                }`}
+                  }`}
               >
                 {item.label}
                 {/* Gold underline on active */}
@@ -77,16 +127,14 @@ export function Navbar() {
               aria-label="Toggle menu"
             >
               <div
-                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                  isOpen ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'
-                }`}
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'
+                  }`}
               >
                 <Menu size={24} />
               </div>
               <div
-                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                  isOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'
-                }`}
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'
+                  }`}
               >
                 <X size={24} />
               </div>
@@ -96,10 +144,9 @@ export function Navbar() {
       </div>
 
       {/* Mobile Menu Dropdown */}
-      <div 
-        className={`md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(212,175,55,0.1)] transition-all duration-300 ease-in-out overflow-hidden ${
-          isOpen ? 'max-h-[400px] opacity-100 border-b border-primary/20' : 'max-h-0 opacity-0'
-        }`}
+      <div
+        className={`md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(212,175,55,0.1)] transition-all duration-300 ease-in-out overflow-hidden ${isOpen ? 'max-h-[400px] opacity-100 border-b border-primary/20' : 'max-h-0 opacity-0'
+          }`}
       >
         <div className="flex flex-col gap-2 p-4">
           {navItems.map((item) => (
@@ -107,11 +154,10 @@ export function Navbar() {
               key={item.href}
               href={item.href}
               onClick={() => setIsOpen(false)}
-              className={`relative px-4 py-3 text-sm font-bold tracking-widest transition-all duration-300 rounded-lg ${
-                isActive(item.href)
+              className={`relative px-4 py-3 text-sm font-bold tracking-widest transition-all duration-300 rounded-lg ${isActive(item.href)
                   ? 'text-primary bg-primary/10'
                   : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
-              }`}
+                }`}
             >
               {item.label}
             </Link>
