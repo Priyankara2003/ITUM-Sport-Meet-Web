@@ -37,25 +37,23 @@ export function Footer() {
             </p>
             
             {/* 2 Columns for Developers (23 Batch & 24 Batch) */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-6 text-xs font-semibold text-primary/90 w-full max-w-md">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2 text-xs font-semibold text-primary/90 w-full max-w-md">
               {/* 23 Batch Column */}
-              <div className="flex flex-col items-center md:items-end space-y-2">
-                <div className="text-neutral-400 mb-1 border-b border-primary/20 pb-1 uppercase tracking-wider text-[10px]">23 Batch</div>
+              <div className="flex flex-col items-center md:items-start space-y-2">
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>
-                  <span>[Name 1]</span>
+                  <span>Dhanushka (83)</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>
-                  <span>[Name 2]</span>
+                  <span>Vihara (84)</span>
                 </div>
               </div>
 
               {/* 24 Batch Column */}
               <div className="flex flex-col items-center md:items-start space-y-2">
-                <div className="text-neutral-400 mb-1 border-b border-primary/20 pb-1 uppercase tracking-wider text-[10px]">24 Batch</div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>
