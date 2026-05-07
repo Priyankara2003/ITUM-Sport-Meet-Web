@@ -4,21 +4,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Menu, X } from 'lucide-react'
-import { useEffect, useState } from 'react'
-
-type WeatherState = {
-  location: string
-  tempC: number
-  condition: string
-  iconUrl: string | null
-}
+import { useState } from 'react'
 
 export function Navbar() {
   const pathname = usePathname()
   const isAdminRoute = pathname.startsWith('/admin')
   const [isOpen, setIsOpen] = useState(false)
-  const [weather, setWeather] = useState<WeatherState | null>(null)
-  const [weatherError, setWeatherError] = useState(false)
 
   const isActive = (path: string) => pathname === path
 
@@ -83,7 +74,7 @@ export function Navbar() {
     <nav className="sticky top-0 z-50">
       {/* Glassmorphism backdrop */}
       <div className="absolute inset-0 backdrop-blur-md bg-background/80 border-b border-primary/20"></div>
-      
+
       <div className="relative mx-auto max-w-7xl px-6 flex items-center justify-between h-20">
         {/* Logo/Branding */}
         <Link
@@ -102,62 +93,30 @@ export function Navbar() {
           <span className="sr-only">Sport Meet ITUM</span>
         </Link>
 
-        {/* Center Navigation */}
-        <div className="hidden md:flex items-center gap-2 absolute left-1/2 -translate-x-1/2">
-          {navItems.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={`relative px-4 py-2 font-semibold text-xs tracking-widest transition-all duration-300 group ${
-                isActive(item.href)
-                  ? 'text-primary'
-                  : 'text-muted-foreground hover:text-primary'
-              }`}
-            >
-              {item.label}
-              {/* Gold underline on active */}
-              {isActive(item.href) && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
-              )}
-              {/* Hover effect */}
-              {!isActive(item.href) && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              )}
-            </Link>
-          ))}
-        </div>
-
-        {/* Right Side */}
+        {/* Right Side: Navigation & Mobile Menu */}
         <div className="flex items-center gap-4">
-          {/* Weather */}
-          <div className="flex items-center gap-3">
-            <div className="hidden sm:block w-px h-6 bg-gradient-to-b from-transparent via-primary/30 to-transparent"></div>
-            <div className="flex items-center gap-2 text-xs text-primary/80 font-mono tracking-wide">
-              {weather?.iconUrl ? (
-                <Image
-                  src={weather.iconUrl}
-                  alt={weather.condition}
-                  width={20}
-                  height={20}
-                  className="h-5 w-5"
-                />
-              ) : (
-                <div className="h-5 w-5 rounded-full bg-primary/20" aria-hidden="true" />
-              )}
-              <span className="hidden sm:inline">
-                {weather?.location ?? 'Diyagama'}
-              </span>
-              <span className="font-semibold">
-                {weather ? `${Math.round(weather.tempC)}°C` : '--°C'}
-              </span>
-              <span className="hidden sm:inline text-primary/60">
-                {weather
-                  ? weather.condition
-                  : weatherError
-                    ? 'Weather unavailable'
-                    : 'Loading weather'}
-              </span>
-            </div>
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center gap-2">
+            {navItems.map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={`relative px-4 py-2 font-semibold text-xs tracking-widest transition-all duration-300 group ${isActive(item.href)
+                    ? 'text-primary'
+                    : 'text-muted-foreground hover:text-primary'
+                  }`}
+              >
+                {item.label}
+                {/* Gold underline on active */}
+                {isActive(item.href) && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent"></div>
+                )}
+                {/* Hover effect */}
+                {!isActive(item.href) && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-primary to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                )}
+              </Link>
+            ))}
           </div>
 
           {/* Mobile menu button */}
@@ -168,16 +127,14 @@ export function Navbar() {
               aria-label="Toggle menu"
             >
               <div
-                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                  isOpen ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'
-                }`}
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'rotate-90 opacity-0 scale-50' : 'rotate-0 opacity-100 scale-100'
+                  }`}
               >
                 <Menu size={24} />
               </div>
               <div
-                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${
-                  isOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'
-                }`}
+                className={`absolute transition-all duration-300 ease-[cubic-bezier(0.4,0,0.2,1)] ${isOpen ? 'rotate-0 opacity-100 scale-100' : '-rotate-90 opacity-0 scale-50'
+                  }`}
               >
                 <X size={24} />
               </div>
@@ -198,23 +155,14 @@ export function Navbar() {
               key={item.href}
               href={item.href}
               onClick={() => setIsOpen(false)}
-              className={`relative px-4 py-3 text-sm font-bold tracking-widest transition-all duration-300 rounded-lg ${
-                isActive(item.href)
+              className={`relative px-4 py-3 text-sm font-bold tracking-widest transition-all duration-300 rounded-lg ${isActive(item.href)
                   ? 'text-primary bg-primary/10'
                   : 'text-muted-foreground hover:text-primary hover:bg-primary/5'
-              }`}
+                }`}
             >
               {item.label}
             </Link>
           ))}
-        </div>
-
-        <div className="px-4 pb-4 text-xs text-primary/70 font-mono tracking-wide">
-          {weather
-            ? `Diyagama · ${Math.round(weather.tempC)}°C · ${weather.condition}`
-            : weatherError
-              ? 'Weather unavailable'
-              : 'Loading weather...'}
         </div>
       </div>
     </nav>
