@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter, Youtube, Linkedin } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="mt-10 border-t border-neutral-800 bg-[#1a1a1a] py-12 text-white">
+    <footer className="mt-10 border-t border-neutral-800 bg-black py-12 text-white">
       <div className="mx-auto max-w-7xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center text-center md:text-left">
           
@@ -56,12 +56,16 @@ export function Footer() {
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-[#961300]">•</span>
-                  <span>Srinath</span>
+                  <a href="https://www.linkedin.com/in/srinath-priyankara" target="_blank" rel="noopener noreferrer" className="text-[#961300] hover:underline">
+                    Srinath
+                  </a>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-[#961300]">•</span>
-                  <span>Dhanushka</span>
+                  <a href="https://www.dhanushka.live" target="_blank" rel="noopener noreferrer" className="text-[#961300] hover:underline">
+                    Dhanushka
+                  </a>
                 </div>
               </div>
             </div>
