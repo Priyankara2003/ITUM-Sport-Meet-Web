@@ -9,7 +9,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center text-center md:text-left">
           
           {/* Left Column: Contact Info (Address Only) */}
-          <div className="flex flex-col items-center md:items-start space-y-4">
+          <div className="flex flex-col items-center md:items-start space-y-4 order-2 md:order-1">
             <h3 className="text-primary font-bold text-lg mb-2 tracking-wide uppercase">Contact Info</h3>
             <div className="text-sm text-muted-foreground space-y-1">
               <p className="font-bold text-foreground">INSTITUTE OF TECHNOLOGY</p>
@@ -21,7 +21,7 @@ export function Footer() {
           </div>
 
           {/* Middle Column: Brand & Credits */}
-          <div className="flex flex-col items-center text-center space-y-4">
+          <div className="flex flex-col items-center text-center space-y-4 order-1 md:order-2">
             <div>
               <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
                 SPORT MEET - ITUM
@@ -71,7 +71,7 @@ export function Footer() {
           </div>
 
           {/* Right Column: Social Icons */}
-          <div className="flex flex-col items-center md:items-end space-y-4">
+          <div className="flex flex-col items-center md:items-end space-y-4 order-3">
             <h3 className="text-primary font-bold text-lg mb-2 tracking-wide uppercase">Connect With Us</h3>
             <div className="flex gap-2 justify-center md:justify-end">
               <Link 
