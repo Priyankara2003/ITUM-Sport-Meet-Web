@@ -72,7 +72,7 @@ export function LiveTicker() {
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
       {/* Left 3/4: Latest News Updates */}
       <motion.div
-        className="lg:col-span-3 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        className="lg:col-span-3 flex flex-col h-[400px] lg:h-[500px] backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
         custom={0}
         initial="hidden"
         whileInView="visible"
@@ -88,7 +88,7 @@ export function LiveTicker() {
             No recent news available.
           </div>
         ) : (
-          <div className="flex flex-col gap-4 w-full flex-1">
+          <div className="flex flex-col gap-4 w-full flex-1 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent">
             {news.map((item, idx) => (
               <motion.div
                 key={item.id}
@@ -122,7 +122,7 @@ export function LiveTicker() {
 
       {/* Right 1/4: Current Match Scores */}
       <motion.div
-        className="lg:col-span-1 flex flex-col h-full backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
+        className="lg:col-span-1 flex flex-col h-[400px] lg:h-[500px] backdrop-blur-sm bg-card/10 border border-primary/20 rounded-2xl p-6 shadow-lg"
         custom={1}
         initial="hidden"
         whileInView="visible"
@@ -137,7 +137,7 @@ export function LiveTicker() {
             No match ongoing right now.
           </div>
         ) : (
-          <div className="flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col overflow-hidden">
             <LiveMatchScores event={currentEvent} houses={houses} />
           </div>
         )}
@@ -180,7 +180,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 h-full overflow-hidden">
       <div className="backdrop-blur-sm bg-primary/10 border border-primary/30 rounded-xl p-3 text-center mb-2 shadow-[0_0_10px_rgba(207,6,30,0.1)]">
         <h3 className="font-bold text-primary text-sm line-clamp-1">{event.name}</h3>
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Current Match</p>
@@ -189,7 +189,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
       {matches.length === 0 ? (
         <div className="text-muted-foreground text-sm text-center">Scores not updated yet.</div>
       ) : (
-        <div className="grid grid-cols-1 gap-3">
+        <div className="grid grid-cols-1 gap-3 overflow-y-auto pr-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-primary/20 [&::-webkit-scrollbar-thumb]:rounded-full hover:[&::-webkit-scrollbar-thumb]:bg-primary/40 [&::-webkit-scrollbar-track]:bg-transparent pb-2">
           {matches.map((match, idx) => {
             const house = houses.find((h) => h.id === match.house_id)
             if (!house) return null
