@@ -67,9 +67,9 @@ function EventScoreboard({
   const { matches, loading } = useMatches(event.id)
 
   const statusColors = {
-    scheduled: 'bg-blue-500/20 text-blue-300',
-    ongoing: 'bg-green-500/20 text-green-300',
-    completed: 'bg-gray-500/20 text-gray-300',
+    scheduled: 'bg-blue-50 text-blue-700',
+    ongoing: 'bg-green-50 text-green-700',
+    completed: 'bg-gray-100 text-gray-600',
   }
 
   const sortedMatches = [...matches].sort(
@@ -133,9 +133,9 @@ function EventScoreboard({
               if (!house) return null
 
               const statusBadges = {
-                pending: 'bg-gray-500/20 text-gray-300',
-                competing: 'bg-yellow-500/20 text-yellow-300',
-                finished: 'bg-green-500/20 text-green-300',
+                pending: 'bg-gray-100 text-gray-600',
+                competing: 'bg-yellow-50 text-yellow-700',
+                finished: 'bg-green-50 text-green-700',
               }
 
               return (

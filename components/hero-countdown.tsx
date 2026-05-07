@@ -67,13 +67,13 @@ export function HeroCountdown() {
   return (
     <div className="mx-auto max-w-7xl px-4 pb-14 pt-6 sm:px-8">
       <motion.div
-        className="relative overflow-hidden rounded-xl border border-primary/30 bg-card/40 p-4 backdrop-blur-sm sm:p-8"
+        className="relative overflow-hidden rounded-xl border border-border bg-card p-4 sm:p-8 shadow-sm"
         initial={{ opacity: 0, y: 18 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.3 }}
         transition={{ duration: 0.8, ease: easeOut, type: 'tween' }}
       >
-        <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-secondary/5" />
+        <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-primary/3" />
 
         <div className="relative">
             <h3 className="text-center text-xs sm:text-sm font-mono tracking-widest text-muted-foreground/90 mb-6 sm:mb-8 uppercase">
@@ -95,8 +95,8 @@ export function HeroCountdown() {
                 viewport={{ once: true, amount: 0.6 }}
                 transition={{ duration: 0.6, ease: easeOut, delay: idx * 0.08, type: 'tween' }}
               >
-                <div className="absolute inset-0 rounded-lg bg-linear-to-br from-accent/20 to-accent/0 opacity-0 blur transition-opacity duration-300 group-hover:opacity-100" />
-                <div className="relative rounded-lg border border-primary/40 bg-linear-to-br from-background to-card p-4 text-center transition-colors duration-300 hover:border-accent/70">
+                <div className="absolute inset-0 rounded-lg bg-linear-to-br from-primary/10 to-primary/0 opacity-0 blur transition-opacity duration-300 group-hover:opacity-100" />
+                <div className="relative rounded-lg border border-border bg-white p-4 text-center transition-colors duration-300 hover:border-primary/40 shadow-sm">
                   <div className="text-3xl font-black text-primary md:text-4xl">
                     {String(item.value).padStart(2, '0')}
                   </div>
@@ -135,7 +135,7 @@ export function HeroCountdown() {
         >
           <Link
             href="/scoreboard"
-            className="mx-auto block w-full max-w-65 rounded-lg border border-primary/60 bg-primary px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:border-primary hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] sm:mx-0 sm:min-w-50 sm:w-auto"
+            className="mx-auto block w-full max-w-65 rounded-lg border border-black bg-black px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-black/85 sm:mx-0 sm:min-w-50 sm:w-auto"
           >
             <span>View Live Scores</span>
           </Link>
@@ -147,7 +147,7 @@ export function HeroCountdown() {
         >
           <Link
             href="/gallery"
-            className="mx-auto block w-full max-w-65 rounded-lg border border-primary/60 bg-primary px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:border-primary hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] sm:mx-0 sm:min-w-50 sm:w-auto"
+            className="mx-auto block w-full max-w-65 rounded-lg border border-black bg-black px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-black/85 sm:mx-0 sm:min-w-50 sm:w-auto"
           >
             <span>Explore Gallery</span>
           </Link>
@@ -159,7 +159,7 @@ export function HeroCountdown() {
         >
           <Link
             href="/schedule"
-            className="mx-auto block w-full max-w-65 rounded-lg border border-primary/60 bg-primary px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-primary-foreground transition-all duration-300 hover:border-primary hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] sm:mx-0 sm:min-w-50 sm:w-auto"
+            className="mx-auto block w-full max-w-65 rounded-lg border border-black bg-black px-8 py-3 text-center text-sm font-bold uppercase tracking-wider text-white transition-all duration-300 hover:bg-black/85 sm:mx-0 sm:min-w-50 sm:w-auto"
           >
             <span>Full Schedule</span>
           </Link>

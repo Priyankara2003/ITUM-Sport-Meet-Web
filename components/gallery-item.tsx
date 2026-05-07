@@ -33,15 +33,10 @@ export function GalleryItem({ image, onClick }: GalleryItemProps) {
             {image.description}
           </p>
         )}
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center mt-3">
           <span className="text-xs px-2 py-1 rounded bg-primary/20 text-primary">
             {image.category}
           </span>
-          {image.uploaded_by && (
-            <span className="text-xs text-muted-foreground">
-              by {image.uploaded_by}
-            </span>
-          )}
         </div>
       </div>
     </div>
