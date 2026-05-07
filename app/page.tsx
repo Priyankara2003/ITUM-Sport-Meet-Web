@@ -14,7 +14,7 @@ export default function Home() {
         {/* Live Ticker Section */}
         <MotionSection className="relative z-10" delay={0.05}>
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3 drop-shadow-[0_0_20px_rgba(207,6,30,0.2)]">
               LIVE ACTION
             </h2>
             <div className="flex items-center justify-center gap-4">
@@ -29,7 +29,7 @@ export default function Home() {
         {/* House Rankings Section */}
         <MotionSection className="relative z-10" delay={0.1}>
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3 drop-shadow-[0_0_20px_rgba(207,6,30,0.2)]">
               HOUSE STANDINGS
             </h2>
             <div className="flex items-center justify-center gap-4">
@@ -42,7 +42,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <Link
               href="/scoreboard"
-              className="inline-block px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold tracking-wider uppercase text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 border border-primary/50"
+              className="inline-block px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold tracking-wider uppercase text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] transition-all duration-300 border border-primary/60"
             >
               View All Scores
             </Link>
@@ -52,7 +52,7 @@ export default function Home() {
         {/* Upcoming Events Section */}
         <MotionSection className="relative z-10" delay={0.15}>
           <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3 drop-shadow-[0_0_20px_rgba(207,6,30,0.2)]">
               UPCOMING BATTLES
             </h2>
             <div className="flex items-center justify-center gap-4">
@@ -65,7 +65,7 @@ export default function Home() {
           <div className="text-center mt-8">
             <Link
               href="/schedule"
-              className="inline-block px-8 py-3 rounded-lg bg-secondary text-secondary-foreground font-bold tracking-wider uppercase text-sm hover:shadow-[0_0_20px_rgba(201,169,97,0.4)] transition-all duration-300 border border-secondary/50"
+              className="inline-block px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold tracking-wider uppercase text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] transition-all duration-300 border border-primary/60"
             >
               Full Schedule
             </Link>
@@ -74,8 +74,8 @@ export default function Home() {
 
         {/* Featured Sections */}
         <MotionSection className="relative z-10" delay={0.2}>
-          <div className="text-center mb-12">
-            <h2 className="text-4xl md:text-5xl font-black text-primary mb-3 drop-shadow-[0_0_20px_rgba(212,175,55,0.2)]">
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3 drop-shadow-[0_0_20px_rgba(207,6,30,0.2)]">
               DISCOVER
             </h2>
             <div className="flex items-center justify-center gap-4">
@@ -88,7 +88,7 @@ export default function Home() {
             <MotionItem delay={0.05} className="h-full">
               <Link
                 href="/gallery"
-                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(207,6,30,0.2)]"
               >
                 <div className="absolute inset-0 bg-linear-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
                 <div className="relative">
@@ -102,11 +102,11 @@ export default function Home() {
             <MotionItem delay={0.12} className="h-full">
               <Link
                 href="/scoreboard"
-                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-secondary/30 hover:border-secondary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(201,169,97,0.2)]"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(207,6,30,0.2)]"
               >
-                <div className="absolute inset-0 bg-linear-to-br from-secondary/0 to-secondary/5 group-hover:to-secondary/15 transition-all duration-300"></div>
+                <div className="absolute inset-0 bg-linear-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
                 <div className="relative">
-                  <h3 className="font-black text-2xl text-secondary mb-2 uppercase tracking-wider">Scoreboard</h3>
+                  <h3 className="font-black text-2xl text-primary mb-2 uppercase tracking-wider">Scoreboard</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     Track the battle. Check detailed scores and compete for supremacy
                   </p>
@@ -116,7 +116,7 @@ export default function Home() {
             <MotionItem delay={0.18} className="h-full">
               <Link
                 href="/schedule"
-                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(212,175,55,0.2)]"
+                className="group relative flex h-full min-h-45 flex-col overflow-hidden rounded-xl p-6 backdrop-blur-sm bg-card/50 border border-primary/30 hover:border-primary/70 transition-all duration-300 hover:shadow-[0_0_30px_rgba(207,6,30,0.2)]"
               >
                 <div className="absolute inset-0 bg-linear-to-br from-primary/0 to-primary/5 group-hover:to-primary/15 transition-all duration-300"></div>
                 <div className="relative">

@@ -188,7 +188,7 @@ export function Navbar() {
 
       {/* Mobile Menu Dropdown */}
       <div 
-        className={`md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(212,175,55,0.1)] transition-all duration-300 ease-in-out overflow-hidden ${
+        className={`md:hidden absolute left-0 right-0 bg-background/95 backdrop-blur-xl shadow-[0_4px_30px_rgba(207,6,30,0.1)] transition-all duration-300 ease-in-out overflow-hidden ${
           isOpen ? 'max-h-[400px] opacity-100 border-b border-primary/20' : 'max-h-0 opacity-0'
         }`}
       >

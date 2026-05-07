@@ -98,7 +98,7 @@ export function LiveTicker() {
                 viewport={{ once: true, amount: 0.3 }}
                 variants={itemVariants}
                 whileHover={{ y: -4 }}
-                className="backdrop-blur-sm bg-card/40 border border-primary/30 rounded-xl p-6 shadow-[0_0_15px_rgba(212,175,55,0.05)] flex flex-col gap-2 hover:border-primary/60 transition-colors"
+                className="backdrop-blur-sm bg-card/40 border border-primary/30 rounded-xl p-6 shadow-[0_0_15px_rgba(207,6,30,0.05)] flex flex-col gap-2 hover:border-primary/60 transition-colors"
               >
                 <div className="flex items-center justify-between">
                   <h3 className="font-bold text-primary flex items-center gap-2 text-base sm:text-lg">
@@ -181,7 +181,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="backdrop-blur-sm bg-primary/10 border border-primary/30 rounded-xl p-3 text-center mb-2 shadow-[0_0_10px_rgba(212,175,55,0.1)]">
+      <div className="backdrop-blur-sm bg-primary/10 border border-primary/30 rounded-xl p-3 text-center mb-2 shadow-[0_0_10px_rgba(207,6,30,0.1)]">
         <h3 className="font-bold text-primary text-sm line-clamp-1">{event.name}</h3>
         <p className="text-[10px] text-muted-foreground uppercase tracking-wider mt-1">Current Match</p>
       </div>
@@ -229,7 +229,7 @@ function LiveMatchScores({ event, houses }: { event: any; houses: any[] }) {
                 </div>
                 
                 {/* Score */}
-                <div className="text-2xl font-black text-primary drop-shadow-[0_0_5px_rgba(212,175,55,0.3)]">
+                <div className="text-2xl font-black text-primary drop-shadow-[0_0_5px_rgba(207,6,30,0.3)]">
                   {match.score || 0}
                 </div>
               </motion.div>

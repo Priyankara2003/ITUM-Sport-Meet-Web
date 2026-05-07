@@ -2,10 +2,10 @@ import Link from 'next/link'
 
 export function Footer() {
   return (
-    <footer className="mt-32 border-t border-primary/20 backdrop-blur-sm bg-card/30 py-10">
+    <footer className="mt-10 border-t border-primary/20 backdrop-blur-sm bg-card/30 py-10">
       <div className="mx-auto max-w-7xl px-4 text-center">
         <div className="mb-4">
-          <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+          <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(207,6,30,0.3)]">
             SPORT MEET - ITUM
           </p>
         </div>
@@ -50,7 +50,7 @@ export function Footer() {
             href="https://www.facebook.com/profile.php?id=61576624917667"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)]"
+            className="text-muted-foreground hover:text-primary transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_8px_rgba(207,6,30,0.5)]"
             aria-label="Visit our Official Facebook Page"
           >
             <svg

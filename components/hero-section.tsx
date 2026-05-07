@@ -155,7 +155,7 @@ export function HeroSection() {
               </motion.div>
               {/* <Link
                 href="/scoreboard"
-                className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(193,35,44,0.35)] transition-all duration-300 border border-primary/60 hover:border-primary text-center"
+                className="px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.35)] transition-all duration-300 border border-primary/60 hover:border-primary text-center"
               >
                 <span>Show Scoreboard</span>
               </Link> */}
@@ -175,7 +175,7 @@ export function HeroSection() {
           <div className="absolute inset-0 bg-linear-to-r from-primary/5 to-secondary/5"></div>
 
           <div className="relative">
-            <h3 className="text-center text-xs sm:text-sm font-mono tracking-widest text-primary/80 mb-6 sm:mb-8 uppercase">
+            <h3 className="text-center text-xs sm:text-sm font-mono tracking-widest text-muted-foreground/90 mb-6 sm:mb-8 uppercase">
               Next Championship Battle
             </h3>
 
@@ -196,7 +196,7 @@ export function HeroSection() {
                 >
                   <div className="absolute inset-0 bg-linear-to-br from-primary/20 to-primary/0 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur"></div>
                   <div className="relative bg-linear-to-br from-background to-card border border-primary/40 rounded-lg p-4 text-center hover:border-primary/70 transition-colors duration-300">
-                    <div className="text-3xl md:text-4xl font-black text-primary drop-shadow-[0_0_10px_rgba(212,175,55,0.5)]">
+                    <div className="text-3xl md:text-4xl font-black text-primary/80">
                       {String(item.value).padStart(2, '0')}
                     </div>
                     <div className="text-xs md:text-sm text-muted-foreground mt-2 uppercase tracking-wider">
@@ -235,7 +235,7 @@ export function HeroSection() {
           >
             <Link
               href="/scoreboard"
-              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all duration-300 border border-primary/50 hover:border-primary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] transition-all duration-300 border border-primary/60 hover:border-primary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
             >
               <span>View Live Scores</span>
             </Link>
@@ -247,7 +247,7 @@ export function HeroSection() {
           >
             <Link
               href="/gallery"
-              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-secondary text-secondary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(201,169,97,0.4)] transition-all duration-300 border border-secondary/50 hover:border-secondary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] transition-all duration-300 border border-primary/60 hover:border-primary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
             >
               <span>Explore Gallery</span>
             </Link>
@@ -259,7 +259,7 @@ export function HeroSection() {
           >
             <Link
               href="/schedule"
-              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg border border-primary/50 text-primary font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(212,175,55,0.3)] transition-all duration-300 hover:bg-primary/10 text-center sm:mx-0 sm:min-w-[200px] sm:w-auto"
+              className="mx-auto block w-full max-w-[260px] px-8 py-3 rounded-lg bg-primary text-primary-foreground font-bold uppercase tracking-wider text-sm hover:shadow-[0_0_20px_rgba(207,6,30,0.45)] transition-all duration-300 border border-primary/60 hover:border-primary text-center group sm:mx-0 sm:min-w-[200px] sm:w-auto"
             >
               <span>Full Schedule</span>
             </Link>
