@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { HeroSection } from '@/components/hero-section'
+import { HeroCountdown } from '@/components/hero-countdown'
 import { LiveTicker } from '@/components/live-ticker'
 import { HouseRankings } from '@/components/house-rankings'
 import { UpcomingEvents } from '@/components/upcoming-events'
@@ -9,6 +10,7 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <HeroSection />
+      <HeroCountdown />
 
       <div className="mx-auto max-w-7xl px-4 py-16 space-y-24">
         {/* Live Ticker Section */}
