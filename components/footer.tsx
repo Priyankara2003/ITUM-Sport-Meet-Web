@@ -3,7 +3,7 @@ import { Facebook, Instagram, Twitter, Youtube, Linkedin } from 'lucide-react'
 
 export function Footer() {
   return (
-    <footer className="mt-32 border-t border-primary/20 backdrop-blur-sm bg-card/30 py-12">
+    <footer className="mt-10 border-t border-primary/20 backdrop-blur-sm bg-card/30 py-12">
       <div className="mx-auto max-w-7xl px-4">
         {/* Changed items-start to items-center to vertically center everything */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-center text-center md:text-left">
@@ -23,7 +23,7 @@ export function Footer() {
           {/* Middle Column: Brand & Credits */}
           <div className="flex flex-col items-center text-center space-y-4 order-1 md:order-2">
             <div>
-              <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]">
+              <p className="text-primary font-black text-2xl drop-shadow-[0_0_10px_rgba(207,6,30,0.3)]">
                 SPORT MEET - ITUM
               </p>
             </div>
@@ -37,25 +37,23 @@ export function Footer() {
             </p>
             
             {/* 2 Columns for Developers (23 Batch & 24 Batch) */}
-            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-6 text-xs font-semibold text-primary/90 w-full max-w-md">
+            <div className="grid grid-cols-2 gap-x-8 gap-y-2 mt-2 text-xs font-semibold text-primary/90 w-full max-w-md">
               {/* 23 Batch Column */}
-              <div className="flex flex-col items-center md:items-end space-y-2">
-                <div className="text-neutral-400 mb-1 border-b border-primary/20 pb-1 uppercase tracking-wider text-[10px]">23 Batch</div>
+              <div className="flex flex-col items-center md:items-start space-y-2">
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>
-                  <span>[Name 1]</span>
+                  <span>Dhanushka (83)</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>
-                  <span>[Name 2]</span>
+                  <span>Vihara (84)</span>
                 </div>
               </div>
 
               {/* 24 Batch Column */}
               <div className="flex flex-col items-center md:items-start space-y-2">
-                <div className="text-neutral-400 mb-1 border-b border-primary/20 pb-1 uppercase tracking-wider text-[10px]">24 Batch</div>
                 <div className="flex items-center gap-1.5">
                   <span className="text-neutral-500">Dev</span>
                   <span className="blink-dot text-primary">•</span>

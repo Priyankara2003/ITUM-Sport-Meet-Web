@@ -31,8 +31,8 @@ export function HouseRankings() {
   const podiumMeta = {
     1: {
       label: 'CHAMPION',
-      accent: '#d4af37',
-      ring: 'shadow-[0_0_40px_rgba(212,175,55,0.25)]',
+      accent: '#cf061e',
+      ring: 'shadow-[0_0_40px_rgba(207,6,30,0.25)]',
       height: 'md:min-h-[360px] md:-translate-y-4',
     },
     2: {
