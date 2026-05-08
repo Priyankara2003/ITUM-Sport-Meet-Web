@@ -85,28 +85,36 @@ export function Footer() {
                 <Facebook size={20} strokeWidth={2.5} />
               </Link>
               <Link 
-                href="#" 
+                href="https://www.instagram.com/itum.mrt.ac.lk/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2.5 bg-neutral-700/40 text-neutral-400 rounded hover:bg-[#961300]/20 hover:text-[#961300] transition-all duration-300"
                 aria-label="Instagram"
               >
                 <Instagram size={20} strokeWidth={2.5} />
               </Link>
               <Link 
-                href="#" 
+                href="https://x.com/itumlk" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2.5 bg-neutral-700/40 text-neutral-400 rounded hover:bg-[#961300]/20 hover:text-[#961300] transition-all duration-300"
                 aria-label="Twitter"
               >
                 <Twitter size={20} strokeWidth={2.5} />
               </Link>
               <Link 
-                href="#" 
+                href="https://www.youtube.com/channel/UCeGA6J0404xYDFMFnNkjZDg" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2.5 bg-neutral-700/40 text-neutral-400 rounded hover:bg-[#961300]/20 hover:text-[#961300] transition-all duration-300"
                 aria-label="YouTube"
               >
                 <Youtube size={20} strokeWidth={2.5} />
               </Link>
               <Link 
-                href="#" 
+                href="https://www.linkedin.com/company/institute-of-technology-university-of-moratuwa/" 
+                target="_blank"
+                rel="noopener noreferrer"
                 className="p-2.5 bg-neutral-700/40 text-neutral-400 rounded hover:bg-[#961300]/20 hover:text-[#961300] transition-all duration-300"
                 aria-label="LinkedIn"
               >
