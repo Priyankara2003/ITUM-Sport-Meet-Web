@@ -21,7 +21,7 @@ export function LiveTicker() {
       const { data, error } = await supabase
         .from('news_updates')
         .select('*')
-        .order('is_pinned', { ascending: false, nullsLast: true })
+        .order('is_pinned', { ascending: false, nullsFirst: false })
         .order('created_at', { ascending: false })
         .limit(10)
       

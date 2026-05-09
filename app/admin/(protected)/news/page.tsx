@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import { Checkbox } from '@/components/ui/checkbox'
 import { createClient } from '@/lib/supabase/client'
 
 interface NewsUpdate {
@@ -12,11 +13,13 @@ interface NewsUpdate {
   title: string
   content: string
   created_at: string
+  is_pinned?: boolean
 }
 
 const emptyForm = {
   title: '',
   content: '',
+  is_pinned: false,
 }
 
 export default function AdminNewsPage() {
@@ -54,6 +57,7 @@ export default function AdminNewsPage() {
     setForm({
       title: entry.title,
       content: entry.content,
+      is_pinned: entry.is_pinned || false,
     })
   }
 
@@ -87,6 +91,7 @@ export default function AdminNewsPage() {
     const payload = {
       title: form.title.trim(),
       content: form.content.trim(),
+      is_pinned: form.is_pinned,
     }
 
     if (editingId) {
@@ -151,6 +156,21 @@ export default function AdminNewsPage() {
               required
             />
           </div>
+          <div className="flex items-center space-x-2 mt-2">
+            <Checkbox
+              id="is_pinned"
+              checked={form.is_pinned}
+              onCheckedChange={(checked) =>
+                setForm((prev) => ({ ...prev, is_pinned: checked === true }))
+              }
+            />
+            <Label
+              htmlFor="is_pinned"
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Pin this news update
+            </Label>
+          </div>
         </div>
 
         <div className="mt-5 flex flex-wrap gap-3">
@@ -186,10 +206,15 @@ export default function AdminNewsPage() {
               >
                 <div className="flex flex-wrap items-center justify-between gap-2">
                   <div>
-                    <p className="font-semibold text-foreground">
+                    <p className="font-semibold text-foreground flex items-center gap-2">
+                      {entry.is_pinned && (
+                        <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold tracking-wider">
+                          📌 PINNED
+                        </span>
+                      )}
                       {entry.title}
                     </p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-xs text-muted-foreground mt-1">
                       {new Date(entry.created_at).toLocaleString()}
                     </p>
                   </div>

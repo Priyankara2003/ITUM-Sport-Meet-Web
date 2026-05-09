@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { HeroSection } from '@/components/hero-section'
 import { HeroCountdown } from '@/components/hero-countdown'
 import { LiveTicker } from '@/components/live-ticker'
+import { LiveMatchVS } from '@/components/live-match-vs'
 import { HouseRankings } from '@/components/house-rankings'
 import { UpcomingEvents } from '@/components/upcoming-events'
 import { HomeGalleryPreview } from '@/components/home-gallery-preview'
@@ -26,6 +27,8 @@ export default function Home() {
               <div className="w-12 h-px bg-linear-to-l from-transparent to-primary"></div>
             </div>
           </div>
+          <LiveMatchVS />
+          <div className="mt-8" />
           <LiveTicker />
         </MotionSection>
 
