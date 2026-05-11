@@ -8,13 +8,18 @@ import { UpcomingEvents } from '@/components/upcoming-events'
 import { HomeGalleryPreview } from '@/components/home-gallery-preview'
 import { MotionItem, MotionSection } from '@/components/motion-section'
 import { AthleticsResultsFeed } from '@/components/AthleticsResultsFeed'
+import { YouTubeLive } from '@/components/ui/YouTubeLive'
+// YouTubeLive component removed: module not found. If re-adding, ensure the file exists at '@/components/YouTubeLive'
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <HeroSection />
       <HeroCountdown />
+       <YouTubeLive videoId=""/>
       <AthleticsResultsFeed />
+     
+      
 
       <div className="mx-auto max-w-7xl px-4 py-16 space-y-24">
         {/* Live Ticker Section */}
