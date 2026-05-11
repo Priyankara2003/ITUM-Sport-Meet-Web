@@ -3,34 +3,87 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Minus, Plus, RotateCcw } from 'lucide-react'
+import { Minus, Plus, RotateCcw, Lock } from 'lucide-react'
 
-interface SportEvent {
-  id: string
-  name: string
-  status: string
-}
-
-interface House {
-  id: string
-  display_name: string
-  color: string
-  logo_url: string | null
-}
-
-interface MatchParticipant {
-  id: string
-  event_id: string
-  house_id: string
-  score: number
-  status: string
-}
-
+// ── Wrapper Component (Auth Logic) ─────────────────────────────────
 export default function AdminLiveScorePage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [pin, setPin] = useState('')
+  const [error, setError] = useState('')
+  const [isChecking, setIsChecking] = useState(true)
+
+  // 🔴 මෙතනින් ඔයාට ඕන PIN එකක් දාගන්න පුළුවන් (දැනට 2026)
+  const CORRECT_PIN = '2026'
+
+  useEffect(() => {
+    // Page එක refresh කරත් ලොග් වෙලාම ඉන්න sessionStorage එක පාවිච්චි කරනවා
+    const authStatus = sessionStorage.getItem('score_admin_auth')
+    if (authStatus === 'true') {
+      setIsAuthenticated(true)
+    }
+    setIsChecking(false)
+  }, [])
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pin === CORRECT_PIN) {
+      setIsAuthenticated(true)
+      sessionStorage.setItem('score_admin_auth', 'true')
+      setError('')
+    } else {
+      setError('වැරදි PIN අංකයකි. කරුණාකර නැවත උත්සාහ කරන්න.')
+      setPin('')
+    }
+  }
+
+  if (isChecking) return null // Initializing
+
+  // 1. PIN එක ගහලා නැත්නම් Login පිටුව පෙන්වන්න
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <div className="w-full max-w-md p-8 space-y-6 bg-card border border-border/60 rounded-2xl shadow-sm text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+              <Lock size={32} />
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-foreground">Volunteer Login</h2>
+          <p className="text-sm text-muted-foreground">
+            Live Score යාවත්කාලීන කිරීම සඳහා ඔබට ලබා දී ඇති PIN අංකය ඇතුලත් කරන්න.
+          </p>
+          
+          <form onSubmit={handleLogin} className="space-y-4 mt-6">
+            <input
+              type="password"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="PIN එක ඇතුලත් කරන්න"
+              className="w-full h-14 px-4 text-center text-2xl tracking-[0.5em] font-bold rounded-xl border-2 border-input bg-background focus:border-primary focus:ring-primary"
+              autoFocus
+            />
+            {error && <p className="text-sm font-semibold text-red-500">{error}</p>}
+            <Button type="submit" className="w-full h-12 text-base font-bold">
+              Login
+            </Button>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  // 2. PIN එක හරි නම් ප්‍රධාන Controller එක පෙන්වන්න
+  return <LiveScoreDashboard />
+}
+
+// ── Main Dashboard Component (ඔයාගේ පරණ කෝඩ් එකමයි) ───────────────────
+function LiveScoreDashboard() {
   const supabase = useMemo(() => createClient(), [])
-  const [events, setEvents] = useState<SportEvent[]>([])
-  const [houses, setHouses] = useState<House[]>([])
-  const [matches, setMatches] = useState<MatchParticipant[]>([])
+  const [events, setEvents] = useState<any[]>([])
+  const [houses, setHouses] = useState<any[]>([])
+  const [matches, setMatches] = useState<any[]>([])
   const [selectedEventId, setSelectedEventId] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<string | null>(null)
@@ -102,7 +155,6 @@ export default function AdminLiveScorePage() {
       setMatches((prev) =>
         prev.map((m) => (m.id === matchId ? { ...m, score: newScore } : m))
       )
-      // Brief success feedback
       const house = houses.find((h) => h.id === match.house_id)
       setSuccessMsg(`${house?.display_name || 'House'}: ${newScore}`)
       setTimeout(() => setSuccessMsg(null), 1500)
@@ -129,6 +181,11 @@ export default function AdminLiveScorePage() {
     setTimeout(() => setSuccessMsg(null), 2000)
   }
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('score_admin_auth')
+    window.location.reload()
+  }
+
   const getHouse = (houseId: string) => houses.find((h) => h.id === houseId)
 
   if (loading) {
@@ -143,7 +200,14 @@ export default function AdminLiveScorePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Logout Button */}
+      <div className="absolute top-0 right-0">
+        <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-red-500">
+          Logout
+        </Button>
+      </div>
+
       <div>
         <h2 className="text-2xl font-bold text-foreground">⚡ Live Score Controller</h2>
         <p className="mt-1 text-sm text-muted-foreground">
@@ -189,7 +253,6 @@ export default function AdminLiveScorePage() {
           houses={houses}
           supabase={supabase}
           onCreated={() => {
-            // Re-fetch matches after creation
             supabase
               .from('match_participants')
               .select('*')
@@ -305,7 +368,7 @@ export default function AdminLiveScorePage() {
                     </Button>
                     <Button
                       size="lg"
-                      className="w-14 h-14 rounded-xl text-xl font-black"
+                      className="w-14 h-14 rounded-xl text-xl font-black text-white"
                       style={{ backgroundColor: house?.color || '#961300' }}
                       onClick={() => updateScore(match.id, 1)}
                       disabled={isUpdating}
@@ -345,18 +408,8 @@ export default function AdminLiveScorePage() {
   )
 }
 
-// ── Setup Match Component ──────────────────────────────────────────
-function SetupMatch({
-  eventId,
-  houses,
-  supabase,
-  onCreated,
-}: {
-  eventId: string
-  houses: House[]
-  supabase: any
-  onCreated: () => void
-}) {
+// ── Setup Match Component (ඔයාගේ පරණ කෝඩ් එකමයි) ───────────────────
+function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
   const [houseA, setHouseA] = useState('')
   const [houseB, setHouseB] = useState('')
   const [creating, setCreating] = useState(false)
@@ -392,11 +445,10 @@ function SetupMatch({
     onCreated()
   }
 
-  // Filter out already-selected house from the other dropdown
-  const housesForA = houses.filter((h) => h.id !== houseB)
-  const housesForB = houses.filter((h) => h.id !== houseA)
-  const selectedHouseA = houses.find((h) => h.id === houseA)
-  const selectedHouseB = houses.find((h) => h.id === houseB)
+  const housesForA = houses.filter((h: any) => h.id !== houseB)
+  const housesForB = houses.filter((h: any) => h.id !== houseA)
+  const selectedHouseA = houses.find((h: any) => h.id === houseA)
+  const selectedHouseB = houses.find((h: any) => h.id === houseB)
 
   return (
     <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm space-y-6">
@@ -407,9 +459,7 @@ function SetupMatch({
         </p>
       </div>
 
-      {/* House selector cards */}
       <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
-        {/* House A */}
         <div className="flex flex-col items-center gap-3 flex-1 w-full sm:w-auto">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg overflow-hidden"
@@ -428,7 +478,7 @@ function SetupMatch({
             onChange={(e) => setHouseA(e.target.value)}
           >
             <option value="">Select House A</option>
-            {housesForA.map((house) => (
+            {housesForA.map((house: any) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
@@ -436,12 +486,10 @@ function SetupMatch({
           </select>
         </div>
 
-        {/* VS */}
         <div className="flex flex-col items-center gap-1 shrink-0">
           <span className="text-2xl font-black text-muted-foreground/30">VS</span>
         </div>
 
-        {/* House B */}
         <div className="flex flex-col items-center gap-3 flex-1 w-full sm:w-auto">
           <div
             className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg overflow-hidden"
@@ -460,7 +508,7 @@ function SetupMatch({
             onChange={(e) => setHouseB(e.target.value)}
           >
             <option value="">Select House B</option>
-            {housesForB.map((house) => (
+            {housesForB.map((house: any) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
