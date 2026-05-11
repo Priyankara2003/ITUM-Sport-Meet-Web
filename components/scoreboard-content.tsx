@@ -73,7 +73,7 @@ function EventScoreboard({
   }
 
   const sortedMatches = [...matches].sort(
-    (a, b) => (b.rank || 999) - (a.rank || 999)
+    (a, b) => (b.score || 0) - (a.score || 0)
   )
 
   if (loading) {

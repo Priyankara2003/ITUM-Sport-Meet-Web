@@ -184,13 +184,20 @@ export default function AdminLiveScorePage() {
 
       {/* Score cards */}
       {selectedEventId && matches.length === 0 && (
-        <div className="rounded-2xl border border-border/60 bg-card/40 p-8 shadow-sm text-center">
-          <p className="text-muted-foreground">
-            No participants found for this event. Add match participants in the{' '}
-            <a href="/admin/matches" className="text-primary underline font-medium">Matches</a>{' '}
-            tab first.
-          </p>
-        </div>
+        <SetupMatch
+          eventId={selectedEventId}
+          houses={houses}
+          supabase={supabase}
+          onCreated={() => {
+            // Re-fetch matches after creation
+            supabase
+              .from('match_participants')
+              .select('*')
+              .eq('event_id', selectedEventId)
+              .order('score', { ascending: false })
+              .then(({ data }) => setMatches(data || []))
+          }}
+        />
       )}
 
       {matches.length > 0 && (
@@ -334,6 +341,147 @@ export default function AdminLiveScorePage() {
           </div>
         </>
       )}
+    </div>
+  )
+}
+
+// ── Setup Match Component ──────────────────────────────────────────
+function SetupMatch({
+  eventId,
+  houses,
+  supabase,
+  onCreated,
+}: {
+  eventId: string
+  houses: House[]
+  supabase: any
+  onCreated: () => void
+}) {
+  const [houseA, setHouseA] = useState('')
+  const [houseB, setHouseB] = useState('')
+  const [creating, setCreating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+
+  const handleCreate = async () => {
+    if (!houseA || !houseB) {
+      setError('Please select both houses.')
+      return
+    }
+    if (houseA === houseB) {
+      setError('Please select two different houses.')
+      return
+    }
+
+    setCreating(true)
+    setError(null)
+
+    const { error: insertError } = await supabase
+      .from('match_participants')
+      .insert([
+        { event_id: eventId, house_id: houseA, score: 0, status: 'competing' },
+        { event_id: eventId, house_id: houseB, score: 0, status: 'competing' },
+      ])
+
+    if (insertError) {
+      setError(insertError.message)
+      setCreating(false)
+      return
+    }
+
+    setCreating(false)
+    onCreated()
+  }
+
+  // Filter out already-selected house from the other dropdown
+  const housesForA = houses.filter((h) => h.id !== houseB)
+  const housesForB = houses.filter((h) => h.id !== houseA)
+  const selectedHouseA = houses.find((h) => h.id === houseA)
+  const selectedHouseB = houses.find((h) => h.id === houseB)
+
+  return (
+    <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm space-y-6">
+      <div className="text-center">
+        <h3 className="text-lg font-bold text-foreground">Setup Match</h3>
+        <p className="text-sm text-muted-foreground mt-1">
+          Select the two houses competing in this match
+        </p>
+      </div>
+
+      {/* House selector cards */}
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+        {/* House A */}
+        <div className="flex flex-col items-center gap-3 flex-1 w-full sm:w-auto">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg overflow-hidden"
+            style={{ backgroundColor: selectedHouseA?.color || '#d4d4d4' }}
+          >
+            {selectedHouseA?.logo_url ? (
+              <img src={selectedHouseA.logo_url} alt="" className="w-full h-full object-contain p-2" />
+            ) : (
+              selectedHouseA?.display_name?.charAt(0) || '?'
+            )}
+          </div>
+          <select
+            className="h-10 w-full max-w-[200px] rounded-lg border-2 bg-background px-3 text-sm font-semibold text-center"
+            style={{ borderColor: selectedHouseA?.color || '#e5e5e5' }}
+            value={houseA}
+            onChange={(e) => setHouseA(e.target.value)}
+          >
+            <option value="">Select House A</option>
+            {housesForA.map((house) => (
+              <option key={house.id} value={house.id}>
+                {house.display_name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* VS */}
+        <div className="flex flex-col items-center gap-1 shrink-0">
+          <span className="text-2xl font-black text-muted-foreground/30">VS</span>
+        </div>
+
+        {/* House B */}
+        <div className="flex flex-col items-center gap-3 flex-1 w-full sm:w-auto">
+          <div
+            className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-black shadow-lg overflow-hidden"
+            style={{ backgroundColor: selectedHouseB?.color || '#d4d4d4' }}
+          >
+            {selectedHouseB?.logo_url ? (
+              <img src={selectedHouseB.logo_url} alt="" className="w-full h-full object-contain p-2" />
+            ) : (
+              selectedHouseB?.display_name?.charAt(0) || '?'
+            )}
+          </div>
+          <select
+            className="h-10 w-full max-w-[200px] rounded-lg border-2 bg-background px-3 text-sm font-semibold text-center"
+            style={{ borderColor: selectedHouseB?.color || '#e5e5e5' }}
+            value={houseB}
+            onChange={(e) => setHouseB(e.target.value)}
+          >
+            <option value="">Select House B</option>
+            {housesForB.map((house) => (
+              <option key={house.id} value={house.id}>
+                {house.display_name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {error && (
+        <p className="text-sm text-red-600 text-center">{error}</p>
+      )}
+
+      <div className="flex justify-center">
+        <Button
+          onClick={handleCreate}
+          disabled={creating || !houseA || !houseB}
+          className="px-8 gap-2"
+        >
+          {creating ? 'Creating...' : '🏐 Start Match'}
+        </Button>
+      </div>
     </div>
   )
 }
