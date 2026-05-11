@@ -11,6 +11,7 @@ const navItems = [
   { href: '/admin/events', label: 'Events' },
   { href: '/admin/matches', label: 'Matches' },
   { href: '/admin/live-score', label: '⚡ Live Score' },
+  { href: '/admin/athletics-results', label: 'Athletics Results' },
   { href: '/admin/houses', label: 'Houses' },
   { href: '/admin/gallery', label: 'Gallery' },
   { href: '/admin/hero-countdown', label: 'Hero Countdown' },

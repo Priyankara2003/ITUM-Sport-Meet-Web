@@ -7,12 +7,14 @@ import { HouseRankings } from '@/components/house-rankings'
 import { UpcomingEvents } from '@/components/upcoming-events'
 import { HomeGalleryPreview } from '@/components/home-gallery-preview'
 import { MotionItem, MotionSection } from '@/components/motion-section'
+import { AthleticsResultsFeed } from '@/components/AthleticsResultsFeed'
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <HeroSection />
       <HeroCountdown />
+      <AthleticsResultsFeed />
 
       <div className="mx-auto max-w-7xl px-4 py-16 space-y-24">
         {/* Live Ticker Section */}
