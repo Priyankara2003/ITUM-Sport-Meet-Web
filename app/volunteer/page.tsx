@@ -3,36 +3,87 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Minus, Plus, RotateCcw } from 'lucide-react'
+import { Minus, Plus, RotateCcw, Lock } from 'lucide-react'
 
-// ── Interfaces ────────────────────────────────────────────────────────
-interface SportEvent {
-  id: string
-  name: string
-  status: string
-}
-
-interface House {
-  id: string
-  display_name: string
-  color: string
-  logo_url: string | null
-}
-
-interface MatchParticipant {
-  id: string
-  event_id: string
-  house_id: string
-  score: number
-  status: string
-}
-
-// ── Main Dashboard Component ──────────────────────────────────────────
+// ── Wrapper Component (Auth Logic) ─────────────────────────────────
 export default function AdminLiveScorePage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [pin, setPin] = useState('')
+  const [error, setError] = useState('')
+  const [isChecking, setIsChecking] = useState(true)
+
+  // 🔴 You can set any PIN you want (currently 2026)
+  const CORRECT_PIN = '2026'
+
+  useEffect(() => {
+    // Use sessionStorage to stay logged in even after page refresh
+    const authStatus = sessionStorage.getItem('score_admin_auth')
+    if (authStatus === 'true') {
+      setIsAuthenticated(true)
+    }
+    setIsChecking(false)
+  }, [])
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (pin === CORRECT_PIN) {
+      setIsAuthenticated(true)
+      sessionStorage.setItem('score_admin_auth', 'true')
+      setError('')
+    } else {
+      setError('Incorrect PIN. Please try again.')
+      setPin('')
+    }
+  }
+
+  if (isChecking) return null // Initializing
+
+  // 1. If PIN not entered, show login page
+  if (!isAuthenticated) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+        <div className="w-full max-w-md p-8 space-y-6 bg-card border border-border/60 rounded-2xl shadow-sm text-center">
+          <div className="flex justify-center mb-4">
+            <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
+              <Lock size={32} />
+            </div>
+          </div>
+          <h2 className="text-2xl font-bold text-foreground">Volunteer Login</h2>
+          <p className="text-sm text-muted-foreground">
+            Enter the PIN provided to you to update live scores.
+          </p>
+          
+          <form onSubmit={handleLogin} className="space-y-4 mt-6">
+            <input
+              type="password"
+              inputMode="numeric"
+              pattern="[0-9]*"
+              value={pin}
+              onChange={(e) => setPin(e.target.value)}
+              placeholder="Enter PIN"
+              className="w-full h-14 px-4 text-center text-2xl tracking-[0.5em] font-bold rounded-xl border-2 border-input bg-background focus:border-primary focus:ring-primary"
+              autoFocus
+            />
+            {error && <p className="text-sm font-semibold text-red-500">{error}</p>}
+            <Button type="submit" className="w-full h-12 text-base font-bold">
+              Login
+            </Button>
+          </form>
+        </div>
+      </div>
+    )
+  }
+
+  // 2. If PIN is correct, show the main controller
+  return <LiveScoreDashboard />
+}
+
+// ── Main Dashboard Component (Your original code) ───────────────────
+function LiveScoreDashboard() {
   const supabase = useMemo(() => createClient(), [])
-  const [events, setEvents] = useState<SportEvent[]>([])
-  const [houses, setHouses] = useState<House[]>([])
-  const [matches, setMatches] = useState<MatchParticipant[]>([])
+  const [events, setEvents] = useState<any[]>([])
+  const [houses, setHouses] = useState<any[]>([])
+  const [matches, setMatches] = useState<any[]>([])
   const [selectedEventId, setSelectedEventId] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<string | null>(null)
@@ -130,6 +181,11 @@ export default function AdminLiveScorePage() {
     setTimeout(() => setSuccessMsg(null), 2000)
   }
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('score_admin_auth')
+    window.location.reload()
+  }
+
   const getHouse = (houseId: string) => houses.find((h) => h.id === houseId)
 
   if (loading) {
@@ -144,11 +200,18 @@ export default function AdminLiveScorePage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 relative">
+      {/* Logout Button */}
+      <div className="absolute top-0 right-0">
+        <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-red-500">
+          Logout
+        </Button>
+      </div>
+
       <div>
-        <h2 className="text-2xl font-bold text-foreground">⚡ Admin Live Score Controller</h2>
+        <h2 className="text-2xl font-bold text-foreground">⚡ Live Score Controller</h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Quickly update scores during a live match. (Main Admin Access)
+          Quickly update scores during a live match. Changes reflect instantly on the home page.
         </p>
       </div>
 
@@ -183,7 +246,7 @@ export default function AdminLiveScorePage() {
         </div>
       )}
 
-      {/* Setup Match */}
+      {/* Score cards */}
       {selectedEventId && matches.length === 0 && (
         <SetupMatch
           eventId={selectedEventId}
@@ -200,7 +263,6 @@ export default function AdminLiveScorePage() {
         />
       )}
 
-      {/* Score cards */}
       {matches.length > 0 && (
         <>
           {/* VS Display for 2-team matches */}
@@ -270,6 +332,7 @@ export default function AdminLiveScorePage() {
                   className="rounded-2xl border-2 p-6 shadow-sm bg-card/40 flex flex-col items-center gap-4"
                   style={{ borderColor: house?.color || '#e5e5e5' }}
                 >
+                  {/* House info */}
                   <div className="flex items-center gap-3">
                     {house?.logo_url ? (
                       <img src={house.logo_url} alt={house.display_name} className="w-10 h-10 object-contain" />
@@ -284,6 +347,7 @@ export default function AdminLiveScorePage() {
                     <span className="font-bold text-foreground text-lg">{house?.display_name}</span>
                   </div>
 
+                  {/* Score display */}
                   <div
                     className="text-6xl sm:text-7xl font-black tabular-nums"
                     style={{ color: house?.color || '#111' }}
@@ -291,6 +355,7 @@ export default function AdminLiveScorePage() {
                     {match.score}
                   </div>
 
+                  {/* Controls */}
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
@@ -312,6 +377,7 @@ export default function AdminLiveScorePage() {
                     </Button>
                   </div>
 
+                  {/* Quick add buttons */}
                   <div className="flex items-center gap-2 flex-wrap justify-center">
                     {[2, 3, 5].map((n) => (
                       <button
@@ -330,7 +396,7 @@ export default function AdminLiveScorePage() {
           </div>
 
           {/* Reset button */}
-          <div className="flex justify-center mt-6">
+          <div className="flex justify-center">
             <Button variant="outline" onClick={resetScores} className="gap-2">
               <RotateCcw size={16} />
               Reset All Scores
@@ -342,18 +408,8 @@ export default function AdminLiveScorePage() {
   )
 }
 
-// ── Setup Match Component ──────────────────────────────────────────
-function SetupMatch({
-  eventId,
-  houses,
-  supabase,
-  onCreated,
-}: {
-  eventId: string
-  houses: House[]
-  supabase: any
-  onCreated: () => void
-}) {
+// ── Setup Match Component (Your original code) ───────────────────
+function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
   const [houseA, setHouseA] = useState('')
   const [houseB, setHouseB] = useState('')
   const [creating, setCreating] = useState(false)
@@ -389,10 +445,10 @@ function SetupMatch({
     onCreated()
   }
 
-  const housesForA = houses.filter((h) => h.id !== houseB)
-  const housesForB = houses.filter((h) => h.id !== houseA)
-  const selectedHouseA = houses.find((h) => h.id === houseA)
-  const selectedHouseB = houses.find((h) => h.id === houseB)
+  const housesForA = houses.filter((h: any) => h.id !== houseB)
+  const housesForB = houses.filter((h: any) => h.id !== houseA)
+  const selectedHouseA = houses.find((h: any) => h.id === houseA)
+  const selectedHouseB = houses.find((h: any) => h.id === houseB)
 
   return (
     <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm space-y-6">
@@ -422,7 +478,7 @@ function SetupMatch({
             onChange={(e) => setHouseA(e.target.value)}
           >
             <option value="">Select House A</option>
-            {housesForA.map((house) => (
+            {housesForA.map((house: any) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
@@ -452,7 +508,7 @@ function SetupMatch({
             onChange={(e) => setHouseB(e.target.value)}
           >
             <option value="">Select House B</option>
-            {housesForB.map((house) => (
+            {housesForB.map((house: any) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
