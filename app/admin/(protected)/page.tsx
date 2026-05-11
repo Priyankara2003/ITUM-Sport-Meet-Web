@@ -12,6 +12,11 @@ const cards = [
     href: '/admin/matches',
   },
   {
+    title: 'Athletics Results',
+    description: 'Publish Track & Field podium results and history.',
+    href: '/admin/athletics-results',
+  },
+  {
     title: 'Houses',
     description: 'Adjust house data, colors, and totals in real time.',
     href: '/admin/houses',
