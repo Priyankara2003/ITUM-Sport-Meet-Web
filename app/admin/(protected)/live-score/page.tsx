@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Minus, Plus, RotateCcw } from 'lucide-react'
+import { Minus, Plus, RotateCcw, Users } from 'lucide-react'
 
 // ── Interfaces ────────────────────────────────────────────────────────
 interface SportEvent {
@@ -128,6 +128,25 @@ export default function AdminLiveScorePage() {
     setMatches((prev) => prev.map((m) => ({ ...m, score: 0 })))
     setSuccessMsg('All scores reset to 0')
     setTimeout(() => setSuccessMsg(null), 2000)
+  }
+
+  // 🔴 අලුත් Function එක: දැනට ඉන්න කණ්ඩායම් අයින් කරලා අලුත් කණ්ඩායම් දාන්න
+  const clearMatchTeams = async () => {
+    if (!window.confirm('මෙම තරඟය අවසන් කර වෙනත් කණ්ඩායම් තෝරන්න අවශ්‍යද? (ලකුණු මැකී යනු ඇත)')) return
+
+    setError(null)
+    const { error: deleteError } = await supabase
+      .from('match_participants')
+      .delete()
+      .eq('event_id', selectedEventId)
+
+    if (deleteError) {
+      setError(deleteError.message)
+    } else {
+      setMatches([]) // මේක හිස් කරපු ගමන් අර Dropdown ටික ආයේ පේන්න ගන්නවා
+      setSuccessMsg('තරඟය අවසන්. කරුණාකර නව කණ්ඩායම් තෝරන්න.')
+      setTimeout(() => setSuccessMsg(null), 2000)
+    }
   }
 
   const getHouse = (houseId: string) => houses.find((h) => h.id === houseId)
@@ -329,11 +348,16 @@ export default function AdminLiveScorePage() {
             })}
           </div>
 
-          {/* Reset button */}
-          <div className="flex justify-center mt-6">
+          {/* 🔴 අලුතින් දාපු Buttons දෙක */}
+          <div className="flex flex-col sm:flex-row justify-center mt-6 gap-4">
             <Button variant="outline" onClick={resetScores} className="gap-2">
               <RotateCcw size={16} />
               Reset All Scores
+            </Button>
+            
+            <Button variant="destructive" onClick={clearMatchTeams} className="gap-2">
+              <Users size={16} />
+              End Match & Change Teams
             </Button>
           </div>
         </>

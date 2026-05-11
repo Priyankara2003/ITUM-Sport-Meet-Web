@@ -3,20 +3,41 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
-import { Minus, Plus, RotateCcw, Lock } from 'lucide-react'
+import { Minus, Plus, RotateCcw, Lock, Users } from 'lucide-react'
 
-// ── Wrapper Component (Auth Logic) ─────────────────────────────────
-export default function AdminLiveScorePage() {
+// ── Interfaces ────────────────────────────────────────────────────────
+interface SportEvent {
+  id: string
+  name: string
+  status: string
+}
+
+interface House {
+  id: string
+  display_name: string
+  color: string
+  logo_url: string | null
+}
+
+interface MatchParticipant {
+  id: string
+  event_id: string
+  house_id: string
+  score: number
+  status: string
+}
+
+// ── 1. Auth Wrapper Component (PIN Code Logic) ────────────────────────
+export default function VolunteerLiveScorePage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [pin, setPin] = useState('')
   const [error, setError] = useState('')
   const [isChecking, setIsChecking] = useState(true)
 
-  // 🔴 You can set any PIN you want (currently 2026)
+  // Volunteer PIN Code
   const CORRECT_PIN = '2026'
 
   useEffect(() => {
-    // Use sessionStorage to stay logged in even after page refresh
     const authStatus = sessionStorage.getItem('score_admin_auth')
     if (authStatus === 'true') {
       setIsAuthenticated(true)
@@ -36,12 +57,11 @@ export default function AdminLiveScorePage() {
     }
   }
 
-  if (isChecking) return null // Initializing
+  if (isChecking) return null
 
-  // 1. If PIN not entered, show login page
   if (!isAuthenticated) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4">
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-4 mt-20">
         <div className="w-full max-w-md p-8 space-y-6 bg-card border border-border/60 rounded-2xl shadow-sm text-center">
           <div className="flex justify-center mb-4">
             <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center text-primary">
@@ -60,7 +80,7 @@ export default function AdminLiveScorePage() {
               pattern="[0-9]*"
               value={pin}
               onChange={(e) => setPin(e.target.value)}
-              placeholder="Enter PIN"
+              placeholder="PIN Code"
               className="w-full h-14 px-4 text-center text-2xl tracking-[0.5em] font-bold rounded-xl border-2 border-input bg-background focus:border-primary focus:ring-primary"
               autoFocus
             />
@@ -74,23 +94,21 @@ export default function AdminLiveScorePage() {
     )
   }
 
-  // 2. If PIN is correct, show the main controller
   return <LiveScoreDashboard />
 }
 
-// ── Main Dashboard Component (Your original code) ───────────────────
+// ── 2. Main Dashboard Component ───────────────────────────────────────
 function LiveScoreDashboard() {
   const supabase = useMemo(() => createClient(), [])
-  const [events, setEvents] = useState<any[]>([])
-  const [houses, setHouses] = useState<any[]>([])
-  const [matches, setMatches] = useState<any[]>([])
+  const [events, setEvents] = useState<SportEvent[]>([])
+  const [houses, setHouses] = useState<House[]>([])
+  const [matches, setMatches] = useState<MatchParticipant[]>([])
   const [selectedEventId, setSelectedEventId] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [updating, setUpdating] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [successMsg, setSuccessMsg] = useState<string | null>(null)
 
-  // Fetch events and houses on mount
   useEffect(() => {
     const fetchData = async () => {
       const [eventRes, houseRes] = await Promise.all([
@@ -102,7 +120,6 @@ function LiveScoreDashboard() {
       setEvents(allEvents)
       setHouses(houseRes.data || [])
 
-      // Auto-select the first ongoing event if available
       const ongoingEvent = allEvents.find((e) => e.status === 'ongoing')
       if (ongoingEvent) {
         setSelectedEventId(ongoingEvent.id)
@@ -116,7 +133,6 @@ function LiveScoreDashboard() {
     fetchData()
   }, [supabase])
 
-  // Fetch matches for the selected event
   useEffect(() => {
     if (!selectedEventId) return
 
@@ -181,6 +197,25 @@ function LiveScoreDashboard() {
     setTimeout(() => setSuccessMsg(null), 2000)
   }
 
+  // 🔴 New function: Remove existing teams and add new teams
+  const clearMatchTeams = async () => {
+    if (!window.confirm('Do you want to end this match and select different teams? (Scores will be erased)')) return
+
+    setError(null)
+    const { error: deleteError } = await supabase
+      .from('match_participants')
+      .delete()
+      .eq('event_id', selectedEventId)
+
+    if (deleteError) {
+      setError(deleteError.message)
+    } else {
+      setMatches([]) // Clearing this will make the dropdowns appear again
+      setSuccessMsg('Match ended. Please select new teams.')
+      setTimeout(() => setSuccessMsg(null), 2000)
+    }
+  }
+
   const handleLogout = () => {
     sessionStorage.removeItem('score_admin_auth')
     window.location.reload()
@@ -190,7 +225,7 @@ function LiveScoreDashboard() {
 
   if (loading) {
     return (
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-5xl mx-auto p-4 md:p-8 mt-10">
         <div>
           <h2 className="text-2xl font-bold text-foreground">Live Score Controller</h2>
           <p className="mt-1 text-sm text-muted-foreground">Loading...</p>
@@ -200,9 +235,9 @@ function LiveScoreDashboard() {
   }
 
   return (
-    <div className="space-y-6 relative">
+    <div className="space-y-6 max-w-5xl mx-auto p-4 md:p-8 mt-10 relative">
       {/* Logout Button */}
-      <div className="absolute top-0 right-0">
+      <div className="absolute top-4 md:top-8 right-4 md:right-8">
         <Button variant="ghost" size="sm" onClick={handleLogout} className="text-muted-foreground hover:text-red-500">
           Logout
         </Button>
@@ -215,7 +250,6 @@ function LiveScoreDashboard() {
         </p>
       </div>
 
-      {/* Event selector */}
       <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm">
         <label className="block text-sm font-semibold text-foreground mb-2">
           Select Match / Event
@@ -234,7 +268,6 @@ function LiveScoreDashboard() {
         </select>
       </div>
 
-      {/* Status messages */}
       {error && (
         <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           {error}
@@ -246,7 +279,6 @@ function LiveScoreDashboard() {
         </div>
       )}
 
-      {/* Score cards */}
       {selectedEventId && matches.length === 0 && (
         <SetupMatch
           eventId={selectedEventId}
@@ -265,11 +297,9 @@ function LiveScoreDashboard() {
 
       {matches.length > 0 && (
         <>
-          {/* VS Display for 2-team matches */}
           {matches.length === 2 && (
             <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm">
               <div className="flex items-center justify-center gap-4 sm:gap-8">
-                {/* Team A */}
                 {(() => {
                   const house = getHouse(matches[0].house_id)
                   return (
@@ -290,13 +320,11 @@ function LiveScoreDashboard() {
                   )
                 })()}
 
-                {/* VS */}
                 <div className="flex flex-col items-center gap-1">
                   <span className="text-2xl sm:text-3xl font-black text-muted-foreground/40">VS</span>
                   <div className="w-px h-8 bg-border"></div>
                 </div>
 
-                {/* Team B */}
                 {(() => {
                   const house = getHouse(matches[1].house_id)
                   return (
@@ -320,7 +348,6 @@ function LiveScoreDashboard() {
             </div>
           )}
 
-          {/* Score Controls */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {matches.map((match) => {
               const house = getHouse(match.house_id)
@@ -332,7 +359,6 @@ function LiveScoreDashboard() {
                   className="rounded-2xl border-2 p-6 shadow-sm bg-card/40 flex flex-col items-center gap-4"
                   style={{ borderColor: house?.color || '#e5e5e5' }}
                 >
-                  {/* House info */}
                   <div className="flex items-center gap-3">
                     {house?.logo_url ? (
                       <img src={house.logo_url} alt={house.display_name} className="w-10 h-10 object-contain" />
@@ -347,7 +373,6 @@ function LiveScoreDashboard() {
                     <span className="font-bold text-foreground text-lg">{house?.display_name}</span>
                   </div>
 
-                  {/* Score display */}
                   <div
                     className="text-6xl sm:text-7xl font-black tabular-nums"
                     style={{ color: house?.color || '#111' }}
@@ -355,7 +380,6 @@ function LiveScoreDashboard() {
                     {match.score}
                   </div>
 
-                  {/* Controls */}
                   <div className="flex items-center gap-3">
                     <Button
                       variant="outline"
@@ -377,7 +401,6 @@ function LiveScoreDashboard() {
                     </Button>
                   </div>
 
-                  {/* Quick add buttons */}
                   <div className="flex items-center gap-2 flex-wrap justify-center">
                     {[2, 3, 5].map((n) => (
                       <button
@@ -395,11 +418,16 @@ function LiveScoreDashboard() {
             })}
           </div>
 
-          {/* Reset button */}
-          <div className="flex justify-center">
+          {/* 🔴 Newly added two buttons */}
+          <div className="flex flex-col sm:flex-row justify-center mt-6 gap-4">
             <Button variant="outline" onClick={resetScores} className="gap-2">
               <RotateCcw size={16} />
               Reset All Scores
+            </Button>
+            
+            <Button variant="destructive" onClick={clearMatchTeams} className="gap-2">
+              <Users size={16} />
+              End Match & Change Teams
             </Button>
           </div>
         </>
@@ -408,8 +436,18 @@ function LiveScoreDashboard() {
   )
 }
 
-// ── Setup Match Component (Your original code) ───────────────────
-function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
+// ── 3. Setup Match Component ──────────────────────────────────────────
+function SetupMatch({
+  eventId,
+  houses,
+  supabase,
+  onCreated,
+}: {
+  eventId: string
+  houses: House[]
+  supabase: any
+  onCreated: () => void
+}) {
   const [houseA, setHouseA] = useState('')
   const [houseB, setHouseB] = useState('')
   const [creating, setCreating] = useState(false)
@@ -445,10 +483,10 @@ function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
     onCreated()
   }
 
-  const housesForA = houses.filter((h: any) => h.id !== houseB)
-  const housesForB = houses.filter((h: any) => h.id !== houseA)
-  const selectedHouseA = houses.find((h: any) => h.id === houseA)
-  const selectedHouseB = houses.find((h: any) => h.id === houseB)
+  const housesForA = houses.filter((h) => h.id !== houseB)
+  const housesForB = houses.filter((h) => h.id !== houseA)
+  const selectedHouseA = houses.find((h) => h.id === houseA)
+  const selectedHouseB = houses.find((h) => h.id === houseB)
 
   return (
     <div className="rounded-2xl border border-border/60 bg-card/40 p-6 shadow-sm space-y-6">
@@ -478,7 +516,7 @@ function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
             onChange={(e) => setHouseA(e.target.value)}
           >
             <option value="">Select House A</option>
-            {housesForA.map((house: any) => (
+            {housesForA.map((house) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
@@ -508,7 +546,7 @@ function SetupMatch({ eventId, houses, supabase, onCreated }: any) {
             onChange={(e) => setHouseB(e.target.value)}
           >
             <option value="">Select House B</option>
-            {housesForB.map((house: any) => (
+            {housesForB.map((house) => (
               <option key={house.id} value={house.id}>
                 {house.display_name}
               </option>
