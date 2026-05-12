@@ -41,6 +41,11 @@ const cards = [
     description: 'Add or remove admin access securely.',
     href: '/admin/admins',
   },
+  {
+    title: 'Championship',
+    description: 'Update house points and publish final standings.',
+    href: '/admin/championship',
+  }
 ]
 
 export default function AdminOverviewPage() {
