@@ -9,6 +9,7 @@ import { HomeGalleryPreview } from '@/components/home-gallery-preview'
 import { MotionItem, MotionSection } from '@/components/motion-section'
 import { AthleticsResultsFeed } from '@/components/AthleticsResultsFeed'
 import { YouTubeLive } from '@/components/ui/YouTubeLive'
+import { EventTimeline } from '@/components/ui/EventTimeline'
 // YouTubeLive component removed: module not found. If re-adding, ensure the file exists at '@/components/YouTubeLive'
 
 export default function Home() {
@@ -38,9 +39,11 @@ export default function Home() {
           <div className="mt-8" />
           <LiveTicker />
         </MotionSection>
+        
+        <EventTimeline />
 
         {/* House Rankings Section */}
-        <MotionSection className="relative z-10" delay={0.1}>
+        {/* <MotionSection className="relative z-10" delay={0.1}>
           <div className="text-center mb-12">
             <h2 className="text-4xl md:text-5xl font-black text-foreground mb-3">
               HOUSE STANDINGS
@@ -60,7 +63,7 @@ export default function Home() {
               View All Scores
             </Link>
           </div>
-        </MotionSection>
+        </MotionSection> */}
 
         {/* Upcoming Events Section */}
         <MotionSection className="relative z-10" delay={0.15}>
