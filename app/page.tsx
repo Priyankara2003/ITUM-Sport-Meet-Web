@@ -18,8 +18,8 @@ export default function Home() {
   return (
     <main className="min-h-screen bg-background text-foreground">
       <HeroSection />
-      {/* <FinalChampionship/> */}
-      <HeroCountdown />
+      <FinalChampionship/>
+      {/* <HeroCountdown /> */}
        <YouTubeLive videoId="98eAmEgF5bQ?si=yRbTndzo9nnpCrif"/>
       <AthleticsResultsFeed />
      
