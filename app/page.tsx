@@ -12,6 +12,7 @@ import { YouTubeLive } from '@/components/ui/YouTubeLive'
 import { EventTimeline } from '@/components/ui/EventTimeline'
 import FinalChampionship from '@/components/ui/FinalChampionship'
 import FinalReveal from '@/components/ui/FinalChampionship'
+import VictoryModal from '@/components/ui/VictoryModal'
 // YouTubeLive component removed: module not found. If re-adding, ensure the file exists at '@/components/YouTubeLive'
 
 export default function Home() {
@@ -20,8 +21,7 @@ export default function Home() {
       <HeroSection />
       <FinalChampionship/>
       {/* <HeroCountdown /> */}
-       <YouTubeLive videoId="98eAmEgF5bQ?si=yRbTndzo9nnpCrif"/>
-      <AthleticsResultsFeed />
+       <YouTubeLive videoId=""/>
      
       
 
@@ -42,6 +42,8 @@ export default function Home() {
           <div className="mt-8" />
           <LiveTicker />
         </MotionSection>
+              <AthleticsResultsFeed />
+
         {/* <FinalChampionship/> */}
 
         <EventTimeline />
@@ -165,7 +167,7 @@ export default function Home() {
           </div>
         </MotionSection>
       </div>
-
+<VictoryModal/>
     </main>
   )
 }
